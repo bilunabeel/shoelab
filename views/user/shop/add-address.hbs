@@ -1,0 +1,63 @@
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Add Address</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="/add-address">Checkout</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Checkout Area =================-->
+<section class="checkout_area section_gap">
+    <div class="container">
+
+        <div class="billing_details">
+            <div class="row">
+                <form class="row contact_form" action="/add-address/{{user._id}}" method="post" id="addAddress">
+                    <div class="col-lg p-5" style="background-color:  rgb(235, 235, 235);">
+                        <h3>Add new Address</h3>
+                        <div class="col-md form-group p_star">
+                            <input type="text" placeholder="First Name" id="address" class="form-control"
+                                name="fname" />
+                        </div>
+                        <div class="col-md form-group p_star">
+                            <input type="text" placeholder="Last Name" id="pincode" class="form-control" name="lname" />
+                        </div>
+                        <div class="col-md form-group p_star">
+                            <input type="text" placeholder="House Name" id="pincode" class="form-control" name="house" />
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <input type="text" class="form-control" placeholder="Town City" name="towncity" />
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <input type="text" placeholder="District" id="pincode" class="form-control" name="district" />
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <input type="text" placeholder="State" id="pincode" class="form-control" name="state" />
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <input type="number" placeholder="Pincode" id="pincode" class="form-control" name="pincode" />
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <input type="email" placeholder="Email Address" id="pincode" class="form-control" name="email" />
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <input type="number" placeholder="Mobile Number" id="pincode" class="form-control" name="mobile" />
+                        </div>
+                        <div class="row ml-3">
+                            <button class="btn btn-success mr-3" type="submit" >Add</button>
+                            <a href="/address" class="btn btn-warning">Cancel</a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,90 @@
+<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>My Orders</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="/my-order">My Orders</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+
+	<!--================Order Details Area =================-->
+	<section class="order_details section_gap">
+		<div class="container">
+			<div class="order_details_table">
+				<h2>Order Details</h2>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr style="color: blue;">
+								<th scope="col">Date & Order ID</th>
+								<th scope="col">Total</th>
+								<th scope="col">Payment</th>
+								<th scope="col">Details</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each orders}}
+							<tr>
+								<td>
+									<p>{{this.ordered_on}}</p>
+									<p>{{this._id}}</p>
+								</td>
+								<td>
+									<p>₹{{this.grandTotal}}</p>
+								</td>
+								<td>
+									<p>Method: {{this.paymentMethod}}</p>
+									<p>Status: {{this.payment_status}}</p>
+								</td>
+								<td>
+									<a href="/viewOrderProducts/{{this._id}}" class="btn btn-primary">More...</a>
+								</td>
+							</tr>
+							{{/each}}
+							<tr>
+								<td>
+									<h4>Subtotal</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>$2160.00</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h4>Shipping</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>Flat rate: $50.00</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h4>Total</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>$2210.00</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Order Details Area =================-->

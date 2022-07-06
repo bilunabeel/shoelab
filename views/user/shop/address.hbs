@@ -1,0 +1,99 @@
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Manage Addresses</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="/address">Manage Addresses</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<section class="order_details section_gap">
+    <div class="container">
+        {{#if addresses.address}}
+        {{#each addresses.address}}
+        <div class="row order_d_inner">
+            <div class="col-lg-6">
+                <div class="details_item">
+                    <ul class="list">
+                        <h5>{{this.fname}} {{this.lname}}</h5>
+                        <li><a href="#"><span>House Name</span> : {{this.house}}</a></li>
+                        <li><a href="#"><span>Town City</span> : {{this.towncity}}</a></li>
+                        <li><a href="#"><span>District</span> : {{this.district}}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="details_item">
+                    <ul class="list">
+                        <li><a href="#"><span>State</span> : {{this.state}}</a></li>
+                        <li><a href="#"><span>Pincode</span> : {{this.pincode}}</a></li>
+                        <li><a href="#"><span>Email Address</span> : {{this.email}}</a></li>
+                        <li><a href="#"><span>Mobile Number</span> : {{this.mobile}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <a href="#" class="btn btn-warning mr-3"><i class="bi bi-pencil-fill"></i> Edit Address</a>
+            <button onclick="deleteAddress('{{this._id}}')" class="btn btn-danger mr-3"><i class="bi bi-trash-fill"></i>
+                Delete Address</button>
+            <hr class="mt-4">
+        </div>
+        {{/each}}
+        <a href="/add-address" class="btn btn-success mt-5 mr-3"><i class="bi bi-plus-circle-fill"></i> Add new
+            Address</a>
+        {{else}}
+        <div style="text-align: center;">
+            <a href="/add-address"><i style="font-size: 5rem; margin-top:1.5rem" class="bi bi-plus-circle-fill"></i></a>
+            <h1 style="color: red; margin-top:1.5rem">No Addresses Added</h1>
+            <a href="/add-address" class="btn btn-success mt-4 mr-3">Add new
+            Address</a>
+            <a href="/" class="btn btn-warning mt-4">Continue Shopping</a>
+        </div>
+        {{/if}}
+    </div>
+
+</section>
+
+<script>
+    function deleteAddress(addressId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#ff7300",
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteIt()
+
+                console.log('remove address to ajax')
+            }
+        })
+
+        function deleteIt() {
+            $.ajax({
+                url: '/delete-address',
+                data: {
+                    addressId: addressId
+                },
+                method: 'post',
+                success: (response) => {
+                    if (response) {
+                        location.reload()
+                    }
+                }
+            })
+        }
+
+    }
+</script>

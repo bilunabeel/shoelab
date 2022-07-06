@@ -1,0 +1,53 @@
+
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>OTP Verification</h1>
+					<nav class="d-flex align-items-center">
+						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="category.html">Login/Register<span class="lnr lnr-arrow-right"></span></a>
+            <a href="index.html">Register<span class="lnr lnr-arrow-right"></span></a>
+            <a href="index.html">OTP Verification</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+
+	<!--================Login Box Area =================-->
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="/user/img/login.jpg" alt="">
+						<div class="hover">
+							<p>There are advances being made in science and technology everyday, and a good example of this is the</p>
+							<a class="primary-btn" href="/user-signup">Already have an Account?</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<h3>enter the otp for verification</h3>
+						<form class="row login_form" action="/otpVerify" method="post" id="contactForm" novalidate="novalidate">
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="name" name="otpSignup" placeholder="Your OTP" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+							</div>
+              {{#if otpErr}}
+							<h5 style="margin:0 auto 10px auto; color:red;">{{otpErr}}</h5>
+							{{/if}}
+							<div class="col-md-12 form-group">
+								<button type="submit" value="submit" class="primary-btn">sign up</button>
+								
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->

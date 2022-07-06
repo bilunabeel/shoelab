@@ -1,0 +1,60 @@
+<div class="layout-page">
+  <div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Product
+          Management /</span>
+        Add Categories</h4>
+
+      <!-- Basic Layout & Basic with Icons -->
+      <div class="row">
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+          <div class="card mb-4">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <h5 class="mb-0">Add new Category</h5>
+              <a href="/admin/admin-products" class="btn btn-primary">Go Back</a>
+            </div>
+            <div class="card-body">
+              <form action="/admin/add-category" method="post">
+                <div class="row ">
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="basic-default-name" name="Category"
+                      placeholder="Enter Category Name" required/>
+                    <button type="submit" class="btn btn-primary my-4">Add</button>
+                  </div>
+                </div>
+              </form>
+              {{#if err1}}
+                <div class="alert alert-danger" ><h5>{{err1}}</h5></div>
+                {{/if}}
+            </div>
+
+            <div class="card-body">
+              <form action="/admin/add-subcategory" method="post">
+                <div class="row ">
+                  <div class="form-row mb-4">
+                    <select name="Category" class="form-control">
+                      <option value="none" >Select Category</option>
+                      {{#each allCategory}}
+                      <option >{{this.Category}}</option>
+                      {{/each}}
+                    </select>
+                    <input type="text" class="form-control my-4" id="basic-default-name" name="Sub_category"
+                      placeholder="Enter Subcategory Name" required/>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                  </div>
+                </div>
+              </form>
+               </div>{{#if err2}}
+                <div class="alert alert-danger" ><h5>{{err2}}</h5></div>
+                {{/if}}
+            </div>
+
+          </div>
+        </div>
+        <!-- Basic with Icons -->
+
+      </div>
+    </div>
+  </div>
+</div>

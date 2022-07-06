@@ -1,0 +1,144 @@
+<div class="layout-page">
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+            <nav style="margin: 0; width:100%"
+                class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                id="layout-navbar">
+
+
+                <div class="navbar-nav align-items-center">
+                    <div class="nav-item d-flex align-items-center">
+                        <i class="bx bx-search fs-4 lh-0"></i>
+                        <input type="text" id="myInput" onkeyup="searchTable()" class="form-control border-0 shadow-none" placeholder="Search..."
+                            aria-label="Search..." />
+                    </div>
+                </div>
+            </nav>
+
+
+
+            <div class="d-flex">
+                <h4 class="fw-bold py-3 mb-4">Manage Users</h4>
+            </div>
+
+            <div class="card">
+                <h5 class="card-header">User Details</h5>
+                <div class="table-responsive text-nowrap">
+                    <table id="myTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>User Name</th>
+                                <th>Email Address</th>
+                                <th>Contact Number</th>
+                                <th>Address</th>
+                                <th>Block User</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            {{#each users}} <tr>
+                                <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{this.Firstname}}
+                                        {{this.Lastname}}</strong></td>
+                                <td>{{this.Email}}</td>
+                                <td>{{this.Mobile}}</td>
+                                <td></td>
+                                <td>
+                                    {{#if block}}
+                                    <a onclick="unblockUser('{{this._id}}')" style="color: green;">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            style="fill: green;transform: ;msFilter:;">
+                                            <path
+                                                d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-1.846.634-3.542 1.688-4.897l11.209 11.209A7.946 7.946 0 0 1 12 20c-4.411 0-8-3.589-8-8zm14.312 4.897L7.103 5.688A7.948 7.948 0 0 1 12 4c4.411 0 8 3.589 8 8a7.954 7.954 0 0 1-1.688 4.897z">
+                                            </path>
+                                        </svg>
+                                        Unblock</a>
+                                    {{else}}
+                                    <a onclick="blockUser('{{this._id}}')" style="color: red;">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            style="fill: red;transform: ;msFilter:;">
+                                            <path
+                                                d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-1.846.634-3.542 1.688-4.897l11.209 11.209A7.946 7.946 0 0 1 12 20c-4.411 0-8-3.589-8-8zm14.312 4.897L7.103 5.688A7.948 7.948 0 0 1 12 4c4.411 0 8 3.589 8 8a7.954 7.954 0 0 1-1.688 4.897z">
+                                            </path>
+                                        </svg>
+                                        Block</a>
+                                    {{/if}}
+                                </td>
+
+
+                            </tr> {{/each}}
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        function unblockUser(proId) {
+            $.ajax({
+                url: '/admin/unblockUser/' + proId,
+                method: 'get',
+                success: (response) => {
+
+                    alert(response.msg)
+                    location.reload()
+                }
+            })
+        }
+    </script>
+    <script>
+        function blockUser(proId) {
+            $.ajax({
+                url: '/admin/blockUser/' + proId,
+                method: 'get',
+                success: (response) => {
+                    location.reload()
+                    alert(response.msg)
+                }
+            })
+        }
+    </script>
+
+<script>
+    function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+            }
+        }
+        if (found) {
+            tr[i].style.display = "";
+            found = false;
+        } else {
+            tr[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/admin/vendor/jquery/jquery.min.js"></script>
+    <script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/admin/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="/admin/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>

@@ -1,0 +1,99 @@
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Wishlist</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="/wishlist">Wishlist</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{! ----wishlist area---- }}
+
+<section class="cart_area">
+    <div class="container">
+        <div class="cart_inner">
+            {{#if wishlist.products}}
+            <div class="table-responsive">
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>{{#each wishlist.products}}
+                        <tr>
+                            <td>
+                                <img style="width: 6rem;" src="/uploads/{{pro_id.Images.0.image1}}" alt="" />
+                            </td>
+                            <td>
+                                <h5>{{pro_id.Product_Name}}</h5>
+                            </td>
+                            <td>
+                                <h5>₹{{pro_id.MRP}}</h5>
+                            </td>
+                            <td>
+                                <button onclick="removeFromWishlist('{{pro_id._id}}')" class="btn btn-danger" href="#"><i style="font-size:1.5rem;" class="bi bi-trash-fill"></i></button>
+                                <button onclick="toCartFromWish('{{pro_id._id}}')" class="btn btn-warning ml-3"><i style="font-size: 1.5rem;" class="bi bi-bag"></i></button>
+                            </td>
+                        </tr>{{/each}}
+
+                    </tbody>
+                </table>
+            </div>
+            {{else}}
+            <div style="text-align: center;">
+                <i style="font-size: 5rem; margin-top:1.5rem" class="bi bi-cart-x"></i>
+                <h1 style="color: red; margin-top:1.5rem">Your Wishlist is EMPTY!</h1>
+                <a href="/" class="btn btn-warning mt-4">Continue Shopping</a>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</section>
+
+<script>
+    function removeFromWishlist(proId){
+       Swal.fire({
+        title: 'Are you sure?',
+		text: "You won't be able to revert this!",
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: "#ff7300",
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!'
+       }).then((result)=>{
+        if(result.isConfirmed){
+            removeFromWish()
+            
+        console.log('remove from wish to ajax')
+        }
+       })
+
+        function removeFromWish(){
+                $.ajax({
+                    url:'/removeFromWishlist',
+                    data:{
+                        proId:proId
+                    },
+                    method:'post',
+                    success:(response)=>{
+                        if(response){
+                            location.reload()
+                        }
+                    }
+                })
+            }
+
+    }
+
+    
+</script>
