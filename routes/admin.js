@@ -240,7 +240,7 @@ router.get('/blockUser/:id',(req,res)=>{
   const proId = req.params.id
   console.log(proId);
   console.log("Going to block User");
-  userHelpers.blockUser(proId).then((response)=>{
+  adminHelpers.blockUser(proId).then((response)=>{
     console.log(response);
     res.json({msg:"Block this user?",status:true})
   })
@@ -248,7 +248,7 @@ router.get('/blockUser/:id',(req,res)=>{
 
 router.get('/unblockUser/:id',(req,res)=>{
   const proId = req.params.id
-  userHelpers.unblockUser(proId).then((response)=>{
+  adminHelpers.unblockUser(proId).then((response)=>{
     console.log(response);
     res.json({msg:"Unblock this user?",status:true})
   })

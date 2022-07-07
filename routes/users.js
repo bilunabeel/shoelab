@@ -12,7 +12,13 @@ const moment = require('moment')
 
 const verifyLogin = (req, res, next) => {
   if (req.session.userDetails) {
-    next ();
+    const userId = req.session.userDetails._id
+    userHelpers.isUserBlock(userId).then((user)=>{
+      if(user.block !=true){
+        next ();
+
+      }
+    })
   } else {
     res.redirect ('/user-login');
   }
@@ -60,7 +66,10 @@ router.post ('/user-login', (req, res) => {
       req.session.loginErr = 'Invalid Email or Password';
       res.redirect ('/user-login');
     }
-  });
+  }).catch((err)=>{
+    req.session.loginErr = err.msg
+    res.redirect('/user-login')
+  })
 });
 
 router.get ('/user-signup', (req, res) => {
@@ -95,7 +104,8 @@ router.post ('/user_signup', (req, res) => {
         res.redirect ('/otp-signup');
       }
     })
-    .catch (err => {
+    .catch ((err) => {
+
       req.session.emailexistErr = err.message;
       res.redirect ('/user-signup');
     });

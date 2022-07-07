@@ -96,17 +96,21 @@ module.exports = {
       let response = {};
 
       if (user) {
-        bcrypt.compare(userData.Password, user.Password).then((status) => {
-          if (status) {
-            console.log("Login Success...");
-            response.user = user;
-            response.status = true;
-            resolve(response);
-          } else {
-            console.log("Login Failed...");
-            resolve({ status: false });
-          }
-        });
+        if (user.block) {
+          reject({ status: false, msg: 'Admin Blocked you!' })
+        } else {
+          bcrypt.compare(userData.Password, user.Password).then((status) => {
+            if (status) {
+              console.log("Login Success...");
+              response.user = user;
+              response.status = true;
+              resolve(response);
+            } else {
+              console.log("Login Failed...");
+              resolve({ status: false });
+            }
+          });
+        }
       } else {
         console.log("Login Failed...");
         resolve({ status: false });
@@ -198,28 +202,11 @@ module.exports = {
     });
   },
 
-  blockUser: (userId) => {
-    console.log(userId);
-
+  isUserBlock: (userId) => {
     return new Promise(async (resolve, reject) => {
-      const user = await userdatas.findByIdAndUpdate(
-        { _id: userId },
-        { $set: { block: true } },
-        { upsert: true }
-      );
-      resolve(user);
-    });
-  },
-
-  unblockUser: (userId) => {
-    return new Promise(async (resolve, reject) => {
-      const user = await userdatas.findByIdAndUpdate(
-        { _id: userId },
-        { $set: { block: false } },
-        { upsert: true }
-      );
-      resolve(user);
-    });
+      const user = await userdatas.findOne({ _id: userId })
+      resolve(user)
+    })
   },
 
   getProductDetails: (proId) => {

@@ -2,6 +2,7 @@ const mongoose = require ('mongoose');
 const {resolve, reject} = require ('promise');
 const adminDatas = require ('../models/adminData');
 const couponData = require('../models/coupon')
+const userdatas = require('../models/user')
 
 module.exports = {
   doAdminLogin: adminData => {
@@ -24,6 +25,30 @@ module.exports = {
         console.log ('Admin Login Failed...');
         resolve ({status: false});
       }
+    });
+  },
+
+  blockUser: (userId) => {
+    console.log(userId);
+
+    return new Promise(async (resolve, reject) => {
+      const user = await userdatas.findByIdAndUpdate(
+        { _id: userId },
+        { $set: { block: true } },
+        { upsert: true }
+      );
+      resolve(user);
+    });
+  },
+
+  unblockUser: (userId) => {
+    return new Promise(async (resolve, reject) => {
+      const user = await userdatas.findByIdAndUpdate(
+        { _id: userId },
+        { $set: { block: false } },
+        { upsert: true }
+      );
+      resolve(user);
     });
   },
 
@@ -56,6 +81,6 @@ module.exports = {
         const deleteCoupon = await couponData.findByIdAndDelete({_id:couponId})
         resolve(deleteCoupon)
     })
-  }
+  },
 
 };
