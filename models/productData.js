@@ -5,10 +5,10 @@ const Schema = mongoose.Schema
 const productSchema = new Schema({
     Product_Name:String,
     
-    MRP:String,
-    Discount:String,
-    Size:String,
-    Stock:String,
+    MRP:Number,
+    Discount:Number,
+    Size:Number,
+    Stock:Number,
     Color:String,
     Category: {
         type:mongoose.Schema.Types.ObjectId,

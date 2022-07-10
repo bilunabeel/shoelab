@@ -23,7 +23,8 @@
 					<table class="table">
 						<thead>
 							<tr style="color: blue;">
-								<th scope="col">Date & Order ID</th>
+								<th scope="col">Order ID</th>
+								<th scope="col">Date</th>
 								<th scope="col">Total</th>
 								<th scope="col">Payment</th>
 								<th scope="col">Details</th>
@@ -33,8 +34,10 @@
 							{{#each orders}}
 							<tr>
 								<td>
-									<p>{{this.ordered_on}}</p>
 									<p>{{this._id}}</p>
+								</td>
+								<td>
+									<p>{{this.ordered_on}}</p>
 								</td>
 								<td>
 									<p>₹{{this.grandTotal}}</p>
@@ -48,39 +51,7 @@
 								</td>
 							</tr>
 							{{/each}}
-							<tr>
-								<td>
-									<h4>Subtotal</h4>
-								</td>
-								<td>
-									<h5></h5>
-								</td>
-								<td>
-									<p>$2160.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<h4>Shipping</h4>
-								</td>
-								<td>
-									<h5></h5>
-								</td>
-								<td>
-									<p>Flat rate: $50.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<h4>Total</h4>
-								</td>
-								<td>
-									<h5></h5>
-								</td>
-								<td>
-									<p>$2210.00</p>
-								</td>
-							</tr>
+							
 						</tbody>
 					</table>
 				</div>

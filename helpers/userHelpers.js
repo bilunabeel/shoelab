@@ -242,7 +242,7 @@ module.exports = {
               { $inc: { "products.$.quantity": 1 } }
             )
             .then((response) => {
-              resolve({ proName: product.Product_Name });
+              resolve({ proName: product.Product_Name, msg: 'quantity added' });
             });
         } else {
           // if product not exists, add new product id
@@ -254,7 +254,7 @@ module.exports = {
             .then((response) => {
               resolve({
                 proName: product.Product_Name,
-                msg: "Added,count:res.products.length+1",
+                msg: "'Added',count: res.products.length + 1",
               });
             });
         }
@@ -264,7 +264,7 @@ module.exports = {
           user: userId,
           products: { pro_id: proId, MRP: product.MRP },
         });
-        await cartObj.save(async (err, result) => {
+        await cartObj.save((err, result) => {
           if (err) {
             resolve({ error: "cart not created" });
           } else {
@@ -281,6 +281,20 @@ module.exports = {
     });
   },
 
+  cartItem: (userId) => {
+    return new Promise(async (resolve, reject) => {
+      cartModel
+        .findOne({ user: userId })
+        .populate(["products.pro_id"])
+        .lean().then((response) => {
+          resolve(response)
+        }).catch((err) => {
+          reject({ err, msg: 'cart error' })
+        })
+
+    });
+  },
+
   cartItems: (userId) => {
     return new Promise(async (resolve, reject) => {
       const cartDetails = await cartModel
@@ -288,19 +302,20 @@ module.exports = {
         .populate(["products.pro_id"])
         .lean();
 
-      resolve(cartDetails);
+      resolve(cartDetails)
+
     });
   },
 
   getCartCount: (userId) => {
     return new Promise(async (resolve, reject) => {
       const user = await cartModel.findOne({ user: userId });
-      let count = 0;
+
       if (user) {
         count = user.products.length;
         resolve(count);
       } else {
-        count = 0;
+        let count = 0;
         resolve(count);
       }
     });
@@ -539,37 +554,38 @@ module.exports = {
 
   getOrderProducts: (orderId) => {
     return new Promise(async (resolve, reject) => {
-      const orderDetails = await orderModel
-        .findOne({ _id: orderId })
-        .populate("product.pro_id")
-        .lean();
+      const orderDetails = await orderModel.findOne({ _id: orderId }).populate("product.pro_id").lean();
+
       resolve(orderDetails);
     });
   },
 
   placeOrder: (order, products, total, deliveryCharges, netTotal, user) => {
     return new Promise(async (resolve, reject) => {
-      console.log(order, products, total);
-      const status =
-        order["paymentMethod"] === "Cash on Delivery"
-          ? "Order Placed"
-          : "Order Pending";
+      total = parseInt(order.total) + parseInt(deliveryCharges)
+      let id = mongoose.Types.ObjectId(user._id);
+      const status = order["paymentMethod"] === "Cash on Delivery" ? "Order Placed" : "Order Pending";
+
       const orderObj = await orderModel({
         user_Id: user._id,
         Total: netTotal,
-        ShippingCharge: deliveryCharges,
+        shippingCharges: deliveryCharges,
         grandTotal: total,
+        couponDiscountedPrice: order.discountedPrice,
+        couponPercentage: order.discountAmountPercentage,
+        couponName: order.couponName,
+        PaidAmount: order.mainTotal,
         payment_status: status,
-        paymentMethod: order["paymentMethod"],
+        paymentMethod: order.paymentMethod,
         ordered_on: new Date(),
         product: products.products,
         deliveryDetails: {
-          name: order.fname,
-          number: order.number,
+          fname: order.fname,
+          lname: order.lname,
+          mobile: order.mobile,
           email: order.email,
           house: order.house,
-          localplace: order.localplace,
-          town: order.town,
+          towncity: order.towncity,
           district: order.district,
           state: order.state,
           pincode: order.pincode,
@@ -577,6 +593,29 @@ module.exports = {
       });
 
       await orderObj.save(async (err, res) => {
+        const data = await cartModel.aggregate([
+          {
+            $match: { user: id }
+          },
+          {
+            $unwind: "$products"
+          },
+          {
+            $project: {
+              quantity: "$products.quantity",
+              id: "$products.pro_id"
+            }
+          }
+        ])
+        data.forEach(async (amt) => {
+          await productModel.findOneAndUpdate(
+            {
+              _id: amt.id
+            }, {
+            $inc: { Stock: -(amt.quantity) }
+          }
+          )
+        })
         await cartModel.remove({ user: order.userId });
         resolve(orderObj);
       });
@@ -634,6 +673,69 @@ module.exports = {
           resolve(changeStatus);
         });
     });
+  },
+
+  cancelOrder: (data) => {
+    order = mongoose.Types.ObjectId(data.orderId)
+    let quantity = parseInt(data.quantity)
+    discountPrice = parseInt(data.subtotal) -
+      ((parseInt(data.couponPercentage) * parseInt(data.subtotal)) / 100).toFixed(  
+        0
+      )
+    const status = 'Order Cancelled'
+
+    return new Promise(async (resolve, reject) => {
+      const cancelOrder = await orderModel.updateMany(
+        { _id: data.orderId, "product.pro_id": data.proId },
+        {
+          $set: {
+            "product.$.status": status,
+            "product.$.orderCancelled": true
+          },
+          $inc: {
+            grandTotal: -discountPrice,
+            "product.$.subtotal": -parseInt(data.subtotal),
+            reFund: discountPrice
+          }
+        }
+      )
+      await productModel.findOneAndUpdate(
+        { _id: data.proId },
+        {
+          $inc: {
+            Stock: quantity
+          }
+        }
+      )
+      let prodcuts = await orderModel.aggregate([
+        {
+          $match: { _id: order },
+        },
+        {
+          $project: {
+            _id: 0,
+            product: 1
+          }
+        },
+        {
+          $unwind: "$product"
+        },
+        {
+          $match: { "product.orderCancelled": false }
+        }
+      ])
+      if (prodcuts.length == 0) {
+        await orderModel.updateMany(
+          { _id: data.orderId },
+          {
+            $inc: { reFund: data.shippingCharges, grandTotal: -data.shippingCharges },
+          }
+        )
+        resolve({ status: true })
+      } else {
+        resolve({ status: true })
+      }
+    })
   },
 
   addToWish: (proId, userId) => {
@@ -699,14 +801,13 @@ module.exports = {
 
   validateCoupon: (data, userId) => {
     return new Promise(async (resolve, reject) => {
-      console.log(data.coupon);
 
       obj = {};
 
       const coupon = await couponData.findOne({ couponCode: data.coupon });
       if (coupon) {
         if (coupon.limit > 0) {
-          checkUserUsed = await findOne({
+          checkUserUsed = await couponData.findOne({
             couponCode: data.coupon,
             usedUsers: { $in: [userId] },
           });
@@ -714,20 +815,22 @@ module.exports = {
           if (checkUserUsed) {
             obj.couponUsed = true;
             obj.msg = "You have already used a Coupon";
+            resolve(obj)
             console.log(obj);
           } else {
+            console.log(data.coupon);
             let nowDate = new Date();
             date = new Date(nowDate);
-            console.log(date);
             if (date <= coupon.expirationTime) {
               await couponData.updateOne(
                 { couponCode: data.coupon },
                 { $push: { usedUsers: userId } }
               );
+              console.log(date);
 
               await couponData.findOneAndUpdate(
                 { couponCode: data.coupon },
-                { $push: { limit: -1 } }
+                { $inc: { limit: -1 } }
               );
               let total = parseInt(data.total);
               let percentage = parseInt(coupon.discount);

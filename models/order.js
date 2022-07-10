@@ -1,42 +1,34 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
   },
-  paymentMethod: {
-    type: String,
-  },
+  paymentMethod: { type: String},
+  couponDiscountedPrice:{type:Number,default:0},
+  couponPercentage:{type:Number,default:0},
+  couponName:{type:String},
+  PaidAmount:{type:Number},
+  reFund:{type:Number,default:0},
   product: [
     {
-      pro_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "product",
-      },
-      MRP: {
-        type: Number,
-      },
-      quantity: {
-        type: Number,
-        default: 1, 
-      },
-      subtotal: {
-        type: Number,
-        default: 0,
-      },
-      status: {
-        type: String,
-        default: "Order Placed",
-      },
+      pro_id: { type: mongoose.Schema.Types.ObjectId, ref: 'product' },
+      MRP: { type: Number },
+      quantity: { type: Number, default: 1,},
+      subtotal: {  type: Number,default: 0,},
+      orderCancelled:{type:Boolean,default:false},
+      productName:{type:String},
+      status: { type: String, default: 'Order Placed', },
     },
   ],
   deliveryDetails: {
-    name: String,
-    number: String,
+    fname:String,
+    lname: String,
+    mobile: String,
     email: String,
     house: String,
-    localPlace: String,
-    town: String,
+    locality: String,
+    towncity: String,
     district: String,
     state: String,
     pincode: Number,
@@ -59,5 +51,5 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
-const orderModel = mongoose.model("order", orderSchema);
+const orderModel = mongoose.model('order', orderSchema);
 module.exports = orderModel;

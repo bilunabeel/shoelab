@@ -65,13 +65,13 @@
 
                             <div class="card">
                                 <div class="card-body">
-                                    <input type="text" name="" id="couponInput" value="{{this.couponCode}}" >
+                                    <input type="text" name="" id="{{this._id}}" value="{{this.couponCode}}">
                                     <h1 id="couponCode" class="card-title">{{this.couponCode}}</h1>
                                     <p class="card-text">You Can get <span style="color:red">
                                             {{this.discount}}%</span>
                                         Discount for this Coupon</p>
                                     <p>Expired on : {{this.expirationTime}}</p>
-                                    <button id="copyButton" type="button" onclick="copyFunction('couponInput')"
+                                    <button type="button" onclick="copyFunction('{{this._id}}')"
                                         class="btn btn-primary copy-button">Copy</button>
                                 </div>
                             </div>
@@ -97,8 +97,9 @@
             {{#each addresses.address}}
             <div class="card mr-4" style="width: 18rem;">
                 <div class="card-body">
-                    <p class="card-text"><h6>{{this.fname}} {{this.lname}},</h6> {{this.house}}, {{this.towncity}},
-                        {{this.district}}, {{this.state}}, Pincode: {{this.pincode}}</p>
+                    <p class="card-text">
+                    <h6>{{this.fname}} {{this.lname}},</h6> {{this.house}}, {{this.towncity}},
+                    {{this.district}}, {{this.state}}, Pincode: {{this.pincode}}</p>
                     <P style="color:black">Email: {{this.email}}</P>
                     <p style="color:black">Mobile: {{this.mobile}}</p>
                     <button
@@ -111,43 +112,65 @@
 
         <div class="billing_details">
             <div class="row">
-                <form class="row contact_form" id="checkoutForm" method="post" novalidate="novalidate">
+                <form class="row contact_form address-form" id="checkoutForm" method="post">
                     <div class="col-lg-8">
                         <hr>
                         <h3>Or Enter new Address below</h3>
                         <div class="col-md-6 form-group p_star">
-                            <input type="text" class="form-control" placeholder="First Name" id="fname" name="fname">
+                            <input type="text" class="form-control" placeholder="First Name" id="fname" name="fname" required>
 
                         </div>
                         <div class="col-md-6 form-group p_star">
-                            <input type="text" class="form-control" placeholder="Last Name" id="lname" name="lname">
+                            <input type="text" class="form-control" placeholder="Last Name" id="lname" name="lname" required>
 
                         </div>
+
+                        <input type="text" class="form-control" id="#" name="userId" value="{{addresses._id}}" hidden />
+
+
+                        <div class="col-md-12 form-group" >
+                            <input type="text" class="form-control" id="discountedPrice" name="discountedPrice"
+                                value="0" />
+                        </div>
+                        <div class="col-md-12 form-group" >
+                            <input type="number" class="form-control" id="MainTotal" name="mainTotal"
+                                value="{{grandTotal}}"  />
+                        </div>
+                        <div class="col-md-12 form-group" >
+                            <input type="text" class="form-control" id="couponName" name="couponName"
+                                value="No Coupon Applied"  />
+                        </div>
+                        <div class="col-md-12 form-group" >
+                            <input type="number" class="form-control" id="discountAmountPercentage"
+                                name="discountAmountPercentage"  value="0" />
+                        </div>
+
+
                         <div class="col-md-12 form-group">
-                            <input type="text" class="form-control" id="house" name="house" placeholder="house name">
+                            <input type="text" class="form-control" id="house" name="house" placeholder="house name" required>
                         </div>
                         <div class="col-md-6 form-group p_star">
                             <input type="text" class="form-control" placeholder="Phone Number" id="mobile"
-                                name="mobile">
+                                name="mobile" required>
 
                         </div>
                         <div class="col-md-6 form-group p_star">
-                            <input type="text" class="form-control" placeholder="Email Address" id="email" name="email">
+                            <input type="text" class="form-control" placeholder="Email Address" id="email" name="email" required>
 
                         </div>
                         <div class="col-md-12 form-group p_star">
                             <input type="text" class="form-control" id="towncity" name="towncity"
-                                placeholder="Town City">
+                                placeholder="Town City" required>
                         </div>
                         <div class="col-md-12 form-group p_star">
                             <input type="text" class="form-control" id="district" name="district"
-                                placeholder="District">
+                                placeholder="District" required>
                         </div>
                         <div class="col-md-12 form-group p_star">
-                            <input type="text" class="form-control" id="state" name="state" placeholder="State">
+                            <input type="text" class="form-control" id="state" name="state" placeholder="State" required>
                         </div>
                         <div class="col-md-12 form-group">
-                            <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pincode">
+                            <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pincode" required>
                         </div>
 
                     </div>
@@ -163,7 +186,9 @@
                             <input class="form-control mb-3" type="text" style="margin-left: 0;" name="coupon"
                                 id="couponInput" autocapitalize="on" placeholder="Enter coupon code">
                             <input class="form-control" type="text" style="margin-left: 0;" name="total"
-                                value="{{grandTotal}}" id="couponTotal">
+                                value="{{netTotal}}" id="couponTotal" hidden>
+                            <input class="form-control" type="text" style="margin-left: 0;" name="deliveryCharges"
+                                value="{{deliveryCharges}}" id="deliveryCharges" hidden>
                             <a style="display: inline-block;" id="couponBtn" onclick="couponApply()"
                                 class="btn btn-warning mt-3 mb-3" href="#">Apply Coupon</a>
                             <hr>
@@ -180,8 +205,8 @@
                             <ul class="list list_2">
                                 <li><a href="#">Subtotal <span>₹{{netTotal}}</span></a></li>
                                 <li><a href="#">Shipping <span>₹{{deliveryCharges}}</span></a></li>
-                                <li><a href="#">Coupon Discount <span>-₹</span></a></li>
-                                <li><a href="#">Total <span>₹{{grandTotal}}</span></a></li>
+                                <li><a href="#">Coupon Discount <span id="discount">-₹{{discount}}</span></a></li>
+                                <li><a href="#">Total <span id="totalWithCoupon">₹{{grandTotal}}</span></a></li>
                             </ul>
                             <div class="payment_item">
                                 <div class="radion_btn">
@@ -247,9 +272,9 @@
             "image": "https://example.com/your_logo",
             "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response) {
-                alert(response.razorpay_payment_id);
+                {{!-- alert(response.razorpay_payment_id);
                 alert(response.razorpay_order_id);
-                alert(response.razorpay_signature)
+                alert(response.razorpay_signature) --}}
 
                 verifyPayment(response, order)
             },
@@ -310,30 +335,31 @@
 
 <script>
     function couponApply() {
-        console.log('apply ajax')
         let couponCode = document.getElementById('couponInput').value
         let couponTotal = document.getElementById('couponTotal').value
+        let deliveryCharges = document.getElementById('deliveryCharges').value
         document.getElementById('couponName').value = couponCode
-        console.log('coupon apply script')
+
         $.ajax({
             url: '/apply-coupon',
             data: {
                 coupon: couponCode,
-                total: couponTotal
+                total: couponTotal,
+                deliveryCharges: deliveryCharges
             },
             method: 'post',
             success: (response) => {
                 if (response.couponSuccess) {
                     let oldTotal = parseInt(document.getElementById('couponTotal').value)
-                    let discount = oldTotal - parseInt(response.total)
-                    alert(response.discountpers)
+                    let discount = oldTotal - parseInt(response.total) + parseInt(deliveryCharges)
+
                     let discountPercentage = parseInt(response.discountpers)
                     document.getElementById('totalWithCoupon').innerHTML = '₹' + response.total
                     document.getElementById('discountedPrice').value = discount
                     document.getElementById('discount').innerHTML = '₹' + discount
                     document.getElementById('discountAmountPercentage').value = discountPercentage
 
-                    document.getElementById('mainTotal').value = response.total
+                    document.getElementById('MainTotal').value = response.total
                     $('#discountspan').html(parseInt(discount))
                     $('#discountspan').show()
                     $('#discountLabel').show()
@@ -394,12 +420,23 @@
 </script>
 
 <script>
-   function copyFunction(){
-    var copyText = document.getElementById('couponInput')
-    copyText.select()
-    copyText.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(copyText.value)
+    function copyFunction(couponId) {
+        var copyText = document.getElementById(couponId)
+        copyText.select()
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value)
 
-    alert('copied '+copyText.value)
-   }
+        $(".copy-button").on('click', function (e) {
+            e.preventDefault()
+            var self = $(this)
+            console.log(self.data('title'))
+            Swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'Coupon Copied ' + "'" + copyText.value + "'",
+                showConfirmButton: false,
+                timer: 2000
+            })
+        })
+    }
 </script>

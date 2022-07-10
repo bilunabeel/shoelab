@@ -40,6 +40,15 @@ router.post("/admin-login", (req, res) => {
   });
 });
 
+router.get('/admin-logout',(req,res)=>{
+  res.header(
+    'Cache-control',
+    'no-cache,private, no-store, must-revalidate,max-stale=0,post-check=0,pre-check=0'
+  );
+  req.session.destroy()
+  res.redirect('/admin')
+})
+
 router.get("/admin-home", (req, res) => {
   res.header(
     "Cache-control",
@@ -151,8 +160,7 @@ router.get("/add-product", async (req, res) => {
   });
 });
 
-router.post(
-  "/add-product",
+router.post("/add-product",
   Storage.fields([
     { name: "image1", maxCount: 1 },
     { name: "image2", maxCount: 1 },
@@ -207,8 +215,7 @@ router.get("/edit-products/:id", async (req, res) => {
   });
 });
 
-router.post(
-  "/edit-products/:id",
+router.post( "/edit-products/:id",
   Storage.fields([
     { name: "image1", maxCount: 1 },
     { name: "image2", maxCount: 1 },
@@ -274,14 +281,18 @@ router.post('/add-coupon',async(req,res)=>{
   })
 })
 
-router.get('deleteCoupon/:id',(req,res)=>{
-  const couponId = req.params.id
-  console.log(couponId);
+router.get('/deleteCoupon/:id',(req,res)=>{
+  
+  console.log(req.params.id);
   console.log('hi');
-  adminHelpers.deleteCoupon(couponId).then((response)=>{
-    req.session.couponDelete = response
-    res.redirect('/admin/manage-coupon')
+  adminHelpers.deleteCoupon(req.params.id).then((response)=>{
+    //req.session.couponDelete = response
+    res.json({couponDeleted:true})
   })
+})
+
+router.get('/manage-orders',(req,res)=>{
+  res.render('admin/manage-orders',{adminDetails:true,layout:'admin-layout'})
 })
 
 module.exports = router;

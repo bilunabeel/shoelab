@@ -1,0 +1,268 @@
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			<div class="col-first">
+				<h1>Shop</h1>
+				<nav class="d-flex align-items-center">
+					<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+					<a href="/shop">Shop</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Banner Area -->
+
+
+
+
+
+<div class="container mt-5">
+	<div class="row">
+		<div class="col-xl-3 col-lg-4 col-md-5">
+			<div class="sidebar-categories">
+				<form id="filter" method="post">
+					<div class="head">Filter</div>
+					<ul class="main-categories">
+						<li class="main-nav-list"><a data-toggle="collapse" href="#fruitsVegetable"
+								aria-expanded="false" aria-controls="fruitsVegetable"><span
+									class="lnr lnr-arrow-right"></span>Categories</span></a>
+							<ul class="collapse" id="fruitsVegetable" data-toggle="collapse" aria-expanded="false"
+								aria-controls="fruitsVegetable">
+								<li class="main-nav-list child">
+									<label class="custom-control ">
+										<input type="radio" class="custom-control-input" value="" name="Category">
+										<div class="custom-control-label">All
+										</div>
+									</label>
+								</li>
+								{{#each category}}
+								<li class="main-nav-list child">
+									<label class="custom-control ">
+										<input type="radio" class="custom-control-input" value="{{this._id}}"
+											name="Category">
+										<div class="custom-control-label">{{this.Category}}
+										</div>
+									</label>
+								</li>
+								{{/each}}
+							</ul>
+						</li>
+
+						<li class="main-nav-list"><a data-toggle="collapse" href="#meatFish" aria-expanded="false"
+								aria-controls="meatFish"><span
+									class="lnr lnr-arrow-right"></span>Subcategories</span></a>
+							<ul class="collapse" id="meatFish" data-toggle="collapse" aria-expanded="false"
+								aria-controls="meatFish">
+								<li class="main-nav-list child">
+									<label class="custom-control ">
+										<input type="radio" class="custom-control-input" value="" name="category">
+										<div class="custom-control-label">All
+										</div>
+									</label>
+								</li>
+								{{#each category}}
+								<li class="main-nav-list child">
+									<label class="custom-control ">
+										<input type="radio" class="custom-control-input" value="{{this._id}}"
+											name="category">
+										<div class="custom-control-label">{{this.Category}}
+										</div>
+									</label>
+								</li>
+								{{/each}}
+							</ul>
+						</li>
+						<li class="main-nav-list"><a data-toggle="collapse" href="#meatFish" aria-expanded="false"
+								aria-controls="meatFish"><span class="lnr lnr-arrow-right"></span>Brands</span></a>
+							<ul class="collapse" id="meatFish" data-toggle="collapse" aria-expanded="false"
+								aria-controls="meatFish">
+								<li class="main-nav-list child">
+									<label class="custom-control ">
+										<input type="radio" class="custom-control-input" value="" name="brand">
+										<div class="custom-control-label">All
+										</div>
+									</label>
+								</li>
+								{{#each brands}}
+								<li class="main-nav-list child">
+									<label class="custom-control ">
+										<input type="radio" class="custom-control-input" value="{{this._id}}"
+											name="brand">
+										<div class="custom-control-label">{{this.Brand_Name}}
+										</div>
+									</label>
+								</li>
+								{{/each}}
+
+							</ul>
+						</li>
+
+					</ul>
+				</form>
+			</div>
+
+		</div>
+		<div class="col-xl-9 col-lg-8 col-md-7">
+
+			<div class="filter-bar d-flex flex-wrap align-items-center">
+				<div class="search-product pos-relative bo4 of-hidden">
+
+					<form class="d-flex justify-content-between" id="search" action="/search" method="post">
+
+						<input class="s-text7 size6 p-l-23 p-r-50" style="width:50rem; height:3rem" type="text"
+							name="key" placeholder="Search Products..." required>
+
+						<button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
+							<i class="fs-12 fa fa-search" aria-hidden="true"></i>
+						</button>
+					</form>
+
+				</div>
+			</div>
+			<section class="lattest-product-area pb-40 category-list">
+				{{#if filterResult}}
+				<div class="row" id="products">
+					<!-- single product -->
+
+					{{#each filterResult}}
+					<div class="col-lg-4 col-md-6">
+						<div class="single-product">
+							<img class="img-fluid" src="/uploads/{{this.Images.0.image1}}" alt="">
+							<div class="product-details">
+								<h6>{{this.Product_Name}}</h6>
+								<div class="price">
+									<h6>₹{{this.MRP}}</h6>
+								</div>
+								<div class="prd-bottom">
+
+									<a onclick="addToCart('{{this._id}}')" class="social-info">
+										<span class="ti-bag"></span>
+										<p class="hover-text">to Cart</p>
+									</a>
+									<a onclick="addToWish('{{this._id}}')" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+
+									<a href="/product-details/{{this._id}}" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					{{/each}}
+
+
+				</div>
+				{{/if}}
+			</section>
+			<!-- End Best Seller -->
+
+		</div>
+	</div>
+</div>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<!--===============================================================================================-->
+<script type="text/javascript" src="/user/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script type="text/javascript" src="/user/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+<script type="text/javascript" src="/user/vendor/bootstrap/js/popper.js"></script>
+<script type="text/javascript" src="/user/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script type="text/javascript" src="/user/vendor/select2/select2.min.js"></script>
+<script type="text/javascript" src="/user/vendor/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="/user/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+<script type="text/javascript" src="/user/vendor/slick/slick.min.js"></script>
+<script type="text/javascript" src="/user/js/slick-custom.js"></script>
+<!--===============================================================================================-->
+<script type="text/javascript" src="/user/vendor/sweetalert/sweetalert.min.js"></script>
+<!--===============================================================================================-->
+<script type="text/javascript" src="/user/vendor/noui/nouislider.min.js"></script>
+
+
+
+{{!--
+<script type="text/javascript">
+	$(".selection-1").select2({
+		minimumResultsForSearch: 20,
+		dropdownParent: $('#dropDownSelect1')
+	});
+
+	$(".selection-2").select2({
+		minimumResultsForSearch: 20,
+		dropdownParent: $('#dropDownSelect2')
+	});
+</script> --}}
+
+<script type="text/javascript">
+	/*[ No ui ]
+	===========================================================*/
+	var filterBar = document.getElementById('filter-bar');
+	noUiSlider.create(filterBar, {
+		start: [50, 200],
+		connect: true,
+		range: {
+			'min': 50,
+			'max': 200
+		}
+	});
+	var skipValues = [
+		document.getElementById('value-lower'),
+		document.getElementById('value-upper')
+	];
+	filterBar.noUiSlider.on('update', function (values, handle) {
+		skipValues[handle].innerHTML = Math.round(values[handle]);
+	});
+</script>
+
+<script>
+	$('input[name=brand]').change(function () {
+
+		$.ajax({
+			url: '/search-filter',
+			method: "post",
+			data: $('#filter').serialize(),
+			success: (isResult) => {
+
+				if (isResult.status) {
+					$('#products').load(location.href + "#products");
+				}
+			}
+		})
+	});
+	$('input[name=Prize]').change(function () {
+		$.ajax({
+			url: '/search-filter',
+			method: "post",
+			data: $('#filter').serialize(),
+			success: (isResult) => {
+
+				if (isResult) {
+					$('#products').load(location.href + "#products");
+				}
+			}
+		})
+	});
+	$('input[name=Category]').change(function () {
+		$.ajax({
+			url: '/search-filter',
+			method: "post",
+			data: $('#filter').serialize(),
+			success: (isResult) => {
+				if (isResult) {
+					$('#products').load(location.href + "#products");
+				}
+			}
+		})
+
+	});
+</script>

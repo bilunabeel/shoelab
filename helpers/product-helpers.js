@@ -5,6 +5,7 @@ const subcategories = require("../models/subCategory");
 const productData = require("../models/productData");
 const userData = require('../models/user')
 const { resolve, reject } = require("promise");
+const { default: mongoose } = require("mongoose");
 // const category = require("../models/category");
 
 module.exports = {
@@ -161,6 +162,78 @@ module.exports = {
       console.log(theProduct);
       resolve(theProduct);
     });
+  },
+
+  getSearchProducts:(key)=>{
+    return new Promise(async(resolve,reject)=>{
+      const products = await productData.find({
+        $or:[
+          { Product_Name: { $regex: new RegExp("^" + key + ".*", "i") } },
+        ]
+      }).lean()
+      resolve(products)
+    })
+  },
+
+  filterBrands:(brandFilter)=>{
+    return new Promise(async(resolve,reject)=>{
+      const brandId = mongoose.Types.ObjectId(brandFilter)
+      result=await productData.aggregate([
+        {
+          $match:{Brand:brandId}
+        }
+      ])
+      resolve(result)
+    })
+  },
+
+  searchFilter:(brandFilter,categoryFilter,price)=>{
+    console.log('ladsfjhkjhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+    return new Promise(async(resolve,reject)=>{
+      let result 
+      if(brandFilter && categoryFilter){
+        const brandId = mongoose.Types.ObjectId(brandFilter)
+        const categoryId = mongoose.Types.ObjectId(categoryFilter)
+        result = await productData.aggregate([
+          {
+            $match:{Brand:brandId}
+          },
+          {
+            $match:{Category:categoryId}
+          },
+          {
+            $match:{MRP:{$lt:price}}
+          }
+        ])
+      }else if(brandFilter){
+        const brandId = mongoose.Types.ObjectId(brandFilter)
+        result = await productData.aggregate([
+          {
+            $match:{Brand:brandId}
+          },
+          {
+            $match:{MRP:{$lt:price}}
+          }
+        ])
+      }else if(categoryFilter){
+        const categoryId = mongoose.Types.ObjectId(categoryFilter)
+        result = await productData.aggregate([
+          {
+            $match:{Category:categoryId}
+          },
+          {
+            $match:{MRP:{$lt:price}}
+          }
+        ])
+      }else{
+        result = await productData.aggregate([
+          {
+            $match:{MRP:{$lt:price}}
+          }
+        ])
+      }
+      resolve(result)
+    })
   },
 
 
