@@ -18,6 +18,7 @@ const wishlist = require("../models/wishlist");
 const couponData = require("../models/coupon");
 require('dotenv').config()
 
+
 const instance = new Razorpay({
   key_id: process.env.RAZORPAY_ID,
   key_secret: process.env.RAZORPAY_KEY,
@@ -517,7 +518,16 @@ module.exports = {
           },
         },
       ]);
+      resolve(address)
     });
+  },
+
+  editAddress:(addressId,userId)=>{
+    return new Promise(async(resolve,reject)=>{
+      const editAddress = await userdatas.findByIdAndUpdate({
+
+      })
+    })
   },
 
   deleteAddress: (addressId, userId) => {
@@ -549,6 +559,17 @@ module.exports = {
         .populate("product.pro_id").sort({ _id: -1 })
         .lean();
       resolve(allOrders);
+    });
+  },
+
+  allorders: () => {
+    return new Promise(async (resolve, reject) => {
+      const allorders = await orderModel
+        .find({})
+        .populate("product.pro_id")
+        .sort({ _id: -1 })
+        .lean();
+      resolve(allorders);
     });
   },
 

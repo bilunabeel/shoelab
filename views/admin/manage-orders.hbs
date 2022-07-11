@@ -41,41 +41,29 @@
           <table id="myTable" class="table">
             <thead>
               <tr>
-                <th>Image</th>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>User</th>
+                <th>Total</th>
+                <th>Payment Method</th>
+                <th>Payment Status</th>
                 <th>Details</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Change Status</th>
               </tr>
             </thead>
             <tbody>
              
-
+              {{#each allOrders}}
               <tr>
-                <td><img style="width: 90px;" src="/uploads/{{this.Images.0.image1}}" alt="" />
-                </td>
+                <td>{{this._id}}</td>
                 
-                <td style="font-size: 12px;">
-
-                  {{this.Product_Name}}
-                  of
-                  {{this.Brand.Brand_Name}}
-                  <br />for
-                  {{this.Category.Category}}
-                  for
-                  {{this.Sub_category.Sub_category}}
-                  <br>
-                  size:
-                  {{this.Size}}
-                  <br>
-                  color:
-                  {{this.Color}}
-                </td>
-                <td>{{this.MRP}}</td>
-                <td>Status</td>
-                <td>Change Status</td>
+                <td>{{this.ordered_on}}</td>
+                <td>{{this.deliveryDetails.fname}} {{this.deliveryDetails.lname}}</td>
+                <td>{{this.grandTotal}}</td>
+                <td>{{this.paymentMethod}}</td>
+                <td>{{this.payment_status}}</td>
+                <td><a href="/viewAdminOrdersPros/{{this._id}}" class="btn btn-primary">More...</a></td>
               </tr>
-
+              {{/each}}
             </tbody>
           </table>
         </div>

@@ -2,10 +2,10 @@
     <div class="container">
         <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
             <div class="col-first">
-                <h1>Add Address</h1>
+                <h1>Edit Address</h1>
                 <nav class="d-flex align-items-center">
                     <a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
-                    <a href="/add-address">Checkout</a>
+                    <a href="/edit-address">Edit Address</a>
                 </nav>
             </div>
         </div>
@@ -19,36 +19,36 @@
 
         <div class="billing_details">
             <div class="row">
-                <form class="row contact_form" action="/add-address/{{user._id}}" method="post" id="addAddress">
+                <form class="row contact_form" action="/edit-address/{{user._id}}" method="post">
                     <div class="col-lg p-5" style="background-color:  rgb(235, 235, 235);">
-                        <h3>Add new Address</h3>
+                        <h3>Edit Address</h3>
                         <div class="col-md form-group p_star">
-                            <input type="text" placeholder="First Name" id="address" class="form-control"
-                                name="fname" />
-                        </div>
-                        <div class="col-md form-group p_star">
-                            <input type="text" placeholder="Last Name" id="pincode" class="form-control" name="lname" />
+                            <input type="text" placeholder="First Name"  id="fname" class="form-control"
+                                name="fname" required/>
                         </div>
                         <div class="col-md form-group p_star">
-                            <input type="text" placeholder="House Name" id="pincode" class="form-control" name="house" />
+                            <input type="text" placeholder="Last Name" id="lname" class="form-control" name="lname" required/>
+                        </div>
+                        <div class="col-md form-group p_star">
+                            <input type="text" placeholder="House Name" id="house" class="form-control" name="house" required/>
                         </div>
                         <div class="col-md-6 form-group p_star">
-                            <input type="text" class="form-control" placeholder="Town City" name="towncity" />
+                            <input type="text" class="form-control" id="towncity" placeholder="Town City" name="towncity" required/>
                         </div>
                         <div class="col-md-6 form-group p_star">
-                            <input type="text" placeholder="District" id="pincode" class="form-control" name="district" />
+                            <input type="text" placeholder="District" id="district" class="form-control" name="district" required/>
                         </div>
                         <div class="col-md-6 form-group p_star">
-                            <input type="text" placeholder="State" id="pincode" class="form-control" name="state" />
+                            <input type="text" placeholder="State" id="state" class="form-control" name="state" required/>
                         </div>
                         <div class="col-md-6 form-group p_star">
-                            <input type="number" placeholder="Pincode" id="pincode" class="form-control" name="pincode" />
+                            <input type="number" placeholder="Pincode" id="pincode" class="form-control" name="pincode" required/>
                         </div>
                         <div class="col-md-6 form-group p_star">
-                            <input type="email" placeholder="Email Address" id="pincode" class="form-control" name="email" />
+                            <input type="email" placeholder="Email Address" id="email" class="form-control" name="email" required/>
                         </div>
                         <div class="col-md-6 form-group p_star">
-                            <input type="number" placeholder="Mobile Number" id="pincode" class="form-control" name="mobile" />
+                            <input type="number" placeholder="Mobile Number" id="mobile" class="form-control" name="mobile" required/>
                         </div>
                         <div class="row ml-3">
                             <button class="btn btn-success mr-3" type="submit" >Add</button>

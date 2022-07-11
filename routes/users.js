@@ -497,11 +497,17 @@ router.post('/add-address/:id', async (req, res) => {
   });
 });
 
-router.get('/edit-address/:id', async (req, res) => {
+router.get('/edit-address/:id',verifyLogin, async(req, res) => {
+  console.log(req.params.id);
   const user = req.session.userDetails;
-  const address = await userHelpers.getAddress(req.params.id, user._id);
-  res.render('user/edit-address', { address, user });
+  const address =await userHelpers.getAddress(req.params.id, user._id)
+
+  res.render('user/shop/edit-address',{address});
 });
+
+router.post('/edit-address/:id',(req,res)=>{
+  
+})
 
 router.post('/delete-address', async (req, res) => {
   const address = req.body.addressId;

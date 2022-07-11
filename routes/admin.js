@@ -6,6 +6,7 @@ var router = express.Router();
 const userHelpers = require("../helpers/userHelpers");
 const Storage = require("../middleware/multer");
 const adminHelpers = require('../helpers/adminHelpers')
+const moment = require('moment')
 
 
 
@@ -291,8 +292,23 @@ router.get('/deleteCoupon/:id',(req,res)=>{
   })
 })
 
-router.get('/manage-orders',(req,res)=>{
-  res.render('admin/manage-orders',{adminDetails:true,layout:'admin-layout'})
+router.get('/manage-orders',async(req,res)=>{
+  userHelpers.allorders().then((response)=>{
+    const allOrders = response
+    
+    allOrders.forEach((element) => {
+    element.ordered_on = moment(element.ordered_on).format("MMM Do YY");
+    });
+    res.render('admin/manage-orders',{allOrders,adminDetails:true,layout:'admin-layout'})
+  })
+})
+
+router.get('/viewAdminOrderPros/:id',(req,res)=>{
+  userHelpers.getOrderProducts(req.params.id).then(async(response)=>{
+    const cartCount = await userHelpers.getCartCount()
+    const order = response
+    res.render('admin/viewAdminOrderPros',{cartCount,adminDetails:true,layout:'admin-layout'})
+  })
 })
 
 module.exports = router;

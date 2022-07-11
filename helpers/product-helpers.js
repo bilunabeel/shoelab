@@ -151,7 +151,7 @@ module.exports = {
 
   getProducts: () => {
     return new Promise(async (resolve, reject) => {
-      const allProducts = await productDatas.find().populate(["Category","Sub_category","Brand"]).lean();
+      const allProducts = await productDatas.find().populate(["Category","Sub_category","Brand"]).sort({_id:-1}).lean();
       resolve(allProducts);
     });
   },
