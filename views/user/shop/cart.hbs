@@ -32,7 +32,7 @@
                     <tbody>{{#each cartItems.products}}
                         <tr>
                             <td>
-                                <img style="width: 6rem;" src="/uploads/{{pro_id.Images.[0].image1}}" alt="">
+                                <img style="width: 6rem;" src="data:{{pro_id.Images.0.contentType}};base64,{{pro_id.Images.0.imageBase64}}" alt="">
                             </td>
                             <td>
                                 <h5>{{pro_id.Product_Name}}</h5>

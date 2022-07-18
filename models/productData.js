@@ -6,6 +6,7 @@ const productSchema = new Schema({
     Product_Name:String,
     
     MRP:Number,
+    Price:Number,
     Discount:Number,
     Size:Number,
     Stock:Number,

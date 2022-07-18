@@ -108,8 +108,12 @@ module.exports = {
     });
   },
 
-  addProduct: (data, image1, image2, image3, image4) => {
+  addProduct: (data, imgData) => {
     return new Promise(async (resolve, reject) => {
+
+      MRP = parseInt(data.MRP)
+      Price = MRP - (MRP * data.discount * 0.01).toFixed(0)
+
       const subcategoryData = await subcategories.findOne({
         Sub_category: data.Subcategory,
       });
@@ -118,56 +122,50 @@ module.exports = {
         Category: data.Category,
       });
 
-      console.log("Subcategory: " + subcategoryData);
-      console.log("Brand: " + brandData);
-      console.log("Category: " + categoryData);
+      const newProduct = await productData({
+        Product_Name: data.Product_Name,
+        Description: data.Description,
+        MRP: data.MRP,
+        Price: data.Price,
+        Discount: data.Discount,
+        Size: data.Size,
+        Stock: data.Stock,
+        Color: data.Color,
+        Category: categoryData._id,
+        Sub_category: subcategoryData._id,
+        Brand: brandData._id,
+        Images: imgData,
+      });
+      await newProduct.save(async (err, result) => {
+        if (err) {
+          reject({ msg: "Product can't be added" });
+        } else {
+          resolve({ data: result, msg: "Product Added Successfully" });
+        }
+      });
 
-      if (!image2) {
-        reject({ msg: "Upload Image" });
-      } else {
-        const newProduct = await productData({
-          Product_Name: data.Product_Name,
-          Description: data.Description,
-          MRP: data.MRP,
-          Discount: data.Discount,
-          Size: data.Size,
-          Stock: data.Stock,
-          Color: data.Color,
-          Category: categoryData._id,
-          Sub_category: subcategoryData._id,
-          Brand: brandData._id,
-          Images: { image1, image2, image3, image4 },
-        });
-        await newProduct.save(async (err, result) => {
-          if (err) {
-            reject({ msg: "Product can't be added" });
-          } else {
-            resolve({ data: result, msg: "Product Added Successfully" });
-          }
-        });
-      }
     });
   },
 
   getProducts: () => {
     return new Promise(async (resolve, reject) => {
-      const allProducts = await productDatas.find().populate(["Category","Sub_category","Brand"]).sort({_id:-1}).lean();
+      const allProducts = await productDatas.find().populate(["Category", "Sub_category", "Brand"]).sort({ _id: -1 }).lean();
       resolve(allProducts);
     });
   },
 
   getoneProduct: (data) => {
     return new Promise(async (resolve, reject) => {
-      const theProduct = await productDatas.findOne({_id:data}).populate(["Category","Sub_category","Brand"]).lean();
+      const theProduct = await productDatas.findOne({ _id: data }).populate(["Category", "Sub_category", "Brand"]).lean();
       console.log(theProduct);
       resolve(theProduct);
     });
   },
 
-  getSearchProducts:(key)=>{
-    return new Promise(async(resolve,reject)=>{
+  getSearchProducts: (key) => {
+    return new Promise(async (resolve, reject) => {
       const products = await productData.find({
-        $or:[
+        $or: [
           { Product_Name: { $regex: new RegExp("^" + key + ".*", "i") } },
         ]
       }).lean()
@@ -175,60 +173,60 @@ module.exports = {
     })
   },
 
-  filterBrands:(brandFilter)=>{
-    return new Promise(async(resolve,reject)=>{
+  filterBrands: (brandFilter) => {
+    return new Promise(async (resolve, reject) => {
       const brandId = mongoose.Types.ObjectId(brandFilter)
-      result=await productData.aggregate([
+      result = await productData.aggregate([
         {
-          $match:{Brand:brandId}
+          $match: { Brand: brandId }
         }
       ])
       resolve(result)
     })
   },
 
-  searchFilter:(brandFilter,categoryFilter,price)=>{
+  searchFilter: (brandFilter, categoryFilter, price) => {
     console.log('ladsfjhkjhhhhhhhhhhhhhhhhhhhhhhhhhhh');
-    return new Promise(async(resolve,reject)=>{
-      let result 
-      if(brandFilter && categoryFilter){
+    return new Promise(async (resolve, reject) => {
+      let result
+      if (brandFilter && categoryFilter) {
         const brandId = mongoose.Types.ObjectId(brandFilter)
         const categoryId = mongoose.Types.ObjectId(categoryFilter)
         result = await productData.aggregate([
           {
-            $match:{Brand:brandId}
+            $match: { Brand: brandId }
           },
           {
-            $match:{Category:categoryId}
+            $match: { Category: categoryId }
           },
           {
-            $match:{MRP:{$lt:price}}
+            $match: { MRP: { $lt: price } }
           }
         ])
-      }else if(brandFilter){
+      } else if (brandFilter) {
         const brandId = mongoose.Types.ObjectId(brandFilter)
         result = await productData.aggregate([
           {
-            $match:{Brand:brandId}
+            $match: { Brand: brandId }
           },
           {
-            $match:{MRP:{$lt:price}}
+            $match: { MRP: { $lt: price } }
           }
         ])
-      }else if(categoryFilter){
+      } else if (categoryFilter) {
         const categoryId = mongoose.Types.ObjectId(categoryFilter)
         result = await productData.aggregate([
           {
-            $match:{Category:categoryId}
+            $match: { Category: categoryId }
           },
           {
-            $match:{MRP:{$lt:price}}
+            $match: { MRP: { $lt: price } }
           }
         ])
-      }else{
+      } else {
         result = await productData.aggregate([
           {
-            $match:{MRP:{$lt:price}}
+            $match: { MRP: { $lt: price } }
           }
         ])
       }
@@ -276,7 +274,7 @@ module.exports = {
             Images: { image1, image2, image3, image4 },
           },
         }
-      ); resolve({updateProduct, msg:"The Product is Edited"})
+      ); resolve({ updateProduct, msg: "The Product is Edited" })
     });
   },
 };

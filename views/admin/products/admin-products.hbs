@@ -57,7 +57,7 @@
               {{#each products}}
 
               <tr>
-                <td><img style="width: 90px;" src="/uploads/{{this.Images.0.image1}}" alt="" />
+                <td><img style="width: 90px;" src="data:{{this.Images.0.contentType}};base64,{{this.Images.0.imageBase64}}" alt="" />
                 </td>
                 <td><strong>{{this.Brand.Brand_Name}} {{this.Product_Name}}</strong></td>
                 <td style="font-size: 12px;">
