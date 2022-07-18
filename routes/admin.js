@@ -164,10 +164,11 @@ router.get("/add-product", async (req, res) => {
 });
 
 router.post("/add-product",
-  Storage.array('file'),
+  Storage.any('image'),
   (req, res) => {
 
     const { files } = req
+
     if (!files) {
       const error = new Error('Please select a file...')
       error.httpStatusCode = 400
@@ -194,7 +195,7 @@ router.post("/add-product",
         console.log(response);
         req.flash("msg", "Product Added Successfully");
         res.redirect("/admin/add-product");
-      }).catch((err) => { })
+      }).catch((err) => {})
   }
 );
 

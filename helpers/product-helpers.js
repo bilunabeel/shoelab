@@ -112,7 +112,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
 
       MRP = parseInt(data.MRP)
-      Price = MRP - (MRP * data.discount * 0.01).toFixed(0)
+      Price = MRP - (MRP * data.Discount * 0.01).toFixed(0)
 
       const subcategoryData = await subcategories.findOne({
         Sub_category: data.Subcategory,

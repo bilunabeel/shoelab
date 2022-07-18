@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const multer = require('multer')
 const hbs = require("express-handlebars");
 const mongoose = require("mongoose");
 const session = require("express-session");
