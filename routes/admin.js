@@ -164,7 +164,7 @@ router.get("/add-product", async (req, res) => {
 });
 
 router.post("/add-product",
-  Storage.any('image'),
+  Storage.array('image'),
   (req, res) => {
 
     const { files } = req
@@ -182,7 +182,7 @@ router.post("/add-product",
     const finalImg = []
     imgArray.map((src, index) => {
       const result = finalImg.push({
-        filename: files[index].originalName,
+        filename: files[index].originalname,
         contentType: files[index].mimetype,
         imageBase64: src
       })
