@@ -581,6 +581,20 @@ module.exports = {
     });
   },
 
+  getOrderCount:()=>{
+    return new Promise(async(resolve,reject)=>{
+      const orderCount = await orderModel.find({}).count()
+      resolve(orderCount)
+    })
+  },
+
+  getProductCount:()=>{
+    return new Promise(async(resolve,reject)=>{
+      const productCount = await productModel.find({}).count()
+      resolve(productCount)
+    })
+  },
+
   placeOrder: (order, products, total, deliveryCharges, netTotal, user) => {
     return new Promise(async (resolve, reject) => {
       total = parseInt(order.total) + parseInt(deliveryCharges)

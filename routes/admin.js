@@ -323,4 +323,48 @@ router.get('/viewAdminOrderPros/:id', (req, res) => {
   })
 })
 
+router.get('/report',async(req,res)=>{
+  [orderCount,productCount] = await Promise.all([
+    userHelpers.getOrderCount(),
+    userHelpers.getProductCount()
+  ])
+  res.render('admin/report',{orderCount,productCount,adminDetails:true,layout:'admin-layout'})
+})
+
+router.post("/getData", async (req, res) => {
+  const date = new Date(Date.now());
+  const month = date.toLocaleString("default", { month: "long" });
+  adminHelpers.salesReport(req.body).then((data) => {
+    let pendingAmount = data.pendingAmount;
+    let salesReport = data.salesReport;
+    let brandReport = data.brandReport;
+    let orderCount = data.orderCount;
+    let totalAmountPaid = data.totalAmountPaid;
+    let totalAmountRefund = data.totalAmountRefund;
+
+    let dateArray = [];
+    let totalArray = [];
+    salesReport.forEach((s) => {
+      dateArray.push(`${month}-${s._id} `);
+      totalArray.push(s.Total);
+    });
+    let brandArray = [];
+    let sumArray = [];
+    brandReport.forEach((s) => {
+      brandArray.push(s._id);
+      sumArray.push(s.totalAmount);
+    });
+    res.json({
+      totalAmountRefund,
+      dateArray,
+      totalArray,
+      brandArray,
+      sumArray,
+      orderCount,
+      totalAmountPaid,
+      pendingAmount,
+    });
+  });
+});
+
 module.exports = router;

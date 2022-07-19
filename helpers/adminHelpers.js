@@ -1,7 +1,8 @@
 const mongoose = require ('mongoose');
 const {resolve, reject} = require ('promise');
 const adminDatas = require ('../models/adminData');
-const couponData = require('../models/coupon')
+const couponData = require('../models/coupon');
+const orderModel = require('../models/order');
 const userdatas = require('../models/user')
 
 module.exports = {
@@ -81,6 +82,99 @@ module.exports = {
         const deleteCoupon = await couponData.findByIdAndDelete({_id:couponId})
         resolve(deleteCoupon)
     })
+  },
+
+  salesReport: (data) => {
+    let response = {};
+    let { startDate, endDate } = data;
+    let d1, d2, text;
+    if (!startDate || !endDate) {
+      d1 = new Date();
+      d1.setDate(d1.getDate() - 7);
+      d2 = new Date();
+      text = "For the Last 7 days";
+    } else {
+      d1 = new Date(startDate);
+      d2 = new Date(endDate);
+      text = `Between ${startDate} and ${endDate}`;
+    }
+    const date = new Date(Date.now());
+    const month = date.toLocaleString("default", { month: "long" });
+    return new Promise(async (resolve, reject) => {
+      let salesReport = await orderModel.aggregate([
+        {
+          $match: {
+            ordered_on: {
+              $lt: d2,
+              $gte: d1,
+            },
+          },
+        },
+        {
+          $match: { payment_status: "placed" },
+        },
+        {
+          $group: {
+            _id: { $dayOfMonth: "$ordered_on" },
+            total: { $sum: "$grandTotal" },
+          },
+        },
+      ]);
+      let brandReport = await orderModel.aggregate([
+        {
+          $match: { payment_status: "placed" },
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $project: {
+            brand: "$product.productName",
+            quantity: "$product.quantity",
+          },
+        },
+
+        {
+          $group: {
+            _id: "$brand",
+            totalAmount: { $sum: "$quantity" },
+          },
+        },
+        { $sort: { quantity: -1 } },
+        { $limit: 5 },
+      ]);
+      let orderCount = await orderModel
+        .find({ date: { $gt: d1, $lt: d2 } })
+        .count();
+      let totalAmounts = await orderModel.aggregate([
+        {
+          $match: { payment_status: "placed" },
+        },
+        {
+          $group: {
+            _id: null,
+            totalAmount: { $sum: "$grandTotal" },
+          },
+        },
+      ]);
+      let totalAmountRefund = await orderModel.aggregate([
+        {
+          $match: { status: "placed" },
+        },
+        {
+          $group: {
+            _id: null,
+            totalAmount: { $sum: "$reFund" },
+          },
+        },
+      ]);
+      response.salesReport = salesReport;
+      response.brandReport = brandReport;
+      response.orderCount = orderCount;
+      response.totalAmountPaid = totalAmounts.totalAmount;
+      response.totalAmountRefund = totalAmountRefund.totalAmount;
+      resolve(response);
+    });
   },
 
 };
