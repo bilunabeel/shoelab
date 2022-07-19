@@ -32,10 +32,13 @@
                     <tbody>{{#each cartItems.products}}
                         <tr>
                             <td>
-                                <img style="width: 6rem;" src="data:{{pro_id.Images.0.contentType}};base64,{{pro_id.Images.0.imageBase64}}" alt="">
+                                <img style="width: 6rem;"
+                                    src="data:{{pro_id.Images.0.contentType}};base64,{{pro_id.Images.0.imageBase64}}"
+                                    alt="">
                             </td>
                             <td>
                                 <h5>{{pro_id.Product_Name}}</h5>
+                                <h5>{{this._id}}</h5>
                             </td>
                             <td>
                                 <h5>₹{{pro_id.MRP}}</h5>
@@ -74,14 +77,18 @@
                                 <ul class="list">
                                     <li>Total</li>
                                     <li>Delivery Charge</li>
-                                    <li class="mt-2"><h4>Total Amount to Pay</h4></li>
+                                    <li class="mt-2">
+                                        <h4>Total Amount to Pay</h4>
+                                    </li>
                                 </ul>
                             </td>
                             <td>
                                 <ul class="list">
-                                    <li>{{netTotal}}</li>
-                                    <li>{{deliveryCharges}}</li>
-                                    <li class="mt-2" style="color: black;"><h4>₹{{grandTotal}}</h4></li>
+                                    <li id="netTotal">{{netTotal}}</li>
+                                    <li id="deliveryCharges">{{deliveryCharges}}</li>
+                                    <li id="total" class="mt-2" style="color: black;">
+                                        <h4  >₹{{grandTotal}}</h4>
+                                    </li>
                                 </ul>
                             </td>
                         </tr>
@@ -111,6 +118,8 @@
 <script>
     function changeQuantity(cartId, proId, quantity, count) {
 
+        //let quantity = parseInt(document.getElementById(proId).value)
+
         $.ajax({
             url: '/change-product-quantity',
             data: {
@@ -118,20 +127,67 @@
                 product: proId,
                 quantity: quantity,
                 count: count
+               // MRP: MRP
             },
             method: 'post',
             success: (response) => {
+
                 if (response.removeProduct) {
                     alert('Are u sure to remove this Product from cart?')
                     location.reload()
 
                 } else {
                     location.reload()
+                    let cou = parseInt(count)
+                    let qu = parseInt(quantity)
+                    let pr = parseInt(MRP)
+                    document.getElementById(proId).value = quantity + count
+                    document.getElementById(quantity).innerHTML = "₹ " + (quantity + cou) * (MRP)
+                    document.getElementById('netTotal').innerHTML = "₹ " + response.netTotal
+                    document.getElementById('total').innerHTML = "₹ " + response.grandTotal
+                    document.getElementById("deliveryCharges").innerHTML = "₹ " + response.deliveryCharges
+
                 }
             }
         })
     }
 </script>
 <script>
-    
+    function removeProductFromCart(cartId) {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                ).then(() => {
+                    removeProduct()
+                })
+            }
+        })
+        function removeProduct() {
+            $.ajax({
+                url: "/remove-Product-forCart",
+                data: {
+                    cart: cartId,
+                },
+                method: "post",
+                success: (response) => {
+                    if (response) {
+                        
+                        location.reload()
+                    }
+                }
+            })
+        }
+    }
 </script>

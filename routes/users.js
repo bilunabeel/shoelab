@@ -238,8 +238,7 @@ router.get('/product-details/:id', async (req, res) => {
 });
 
 router.get('/add-to-cart/:id', (req, res) => {
-  console.log('call');
-  console.log(req.session.userDetails);
+
   userHelpers
     .addToCart(req.params.id, req.session.userDetails)
     .then(response => {
@@ -253,7 +252,7 @@ router.get('/cart', verifyLogin, async (req, res) => {
   const user = req.session.userDetails;
   let cartCount = await userHelpers.getCartCount(req.session.userDetails._id);
   if (cartCount > 0) {
-    console.log('-----------');
+
     const subTotal = await userHelpers.subTotal(req.session.userDetails._id);
     const totalAmount = await userHelpers.totalAmount(req.session.userDetails._id);
     const netTotal = await totalAmount.grandTotal.total;
@@ -284,23 +283,33 @@ router.get('/cart', verifyLogin, async (req, res) => {
 
 router.post('/change-product-quantity', async (req, res) => {
   console.log('change product quantity....!');
-
+  
   userHelpers
     .changeProductQuantity(req.body, req.session.userDetails)
-    .then(() => {
-      // console.log("coming...");
-      console.log(req.body);
-      res.json({ status: true });
+    .then(async(response) => {
+      const cartCount = await userHelpers.getCartCount(req.session.userDetails._id)
+      if(cartCount > 0){
+        const subTotal = await userHelpers.subTotal(req.session.userDetails._id)
+        const totalAmount = await userHelpers.totalAmount(req.session.userDetails._id)
+        const netTotal = totalAmount.grandTotal.total
+        const deliveryCharges = await userHelpers.deliveryCharge(netTotal)
+        const grandTotal = await userHelpers.grandTotal(netTotal,deliveryCharges)
+        res.json({
+          response,
+          status:true,
+          grandTotal,
+          deliveryCharges,
+          netTotal
+        })
+      }else{
+
+        res.json({ response });
+      }
     });
 });
 
 router.post('/remove-product-forCart', (req, res, next) => {
-  console.log('dftuyerghdkireu');
-  console.log('remove product from cart');
-
   userHelpers.removeFromCart(req.body, req.session.userDetails).then(() => {
-    console.log('remove loading...');
-    console.log(req.body);
     res.json({ status: true });
   });
 });

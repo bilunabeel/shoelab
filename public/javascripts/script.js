@@ -27,39 +27,39 @@ function addToCartAlert(response) {
   }).then((result) => {});
 }
 
-function removeProductFromCart(cartId) {
-  $.ajax({
-    url: "/remove-product-forCart",
-    data: {
-      cart: cartId,
-    },
-    method: "post",
-    success: (response) => {
-      if (response) {
-        removeFromCartAlert()
-        //alert("Are you sure to remove this product from cart?");
-       // location.reload();
-      }
-    },
-  });
-}
+// function removeProductFromCart(cartId) {
+//   $.ajax({
+//     url: "/remove-product-forCart",
+//     data: {
+//       cart: cartId,
+//     },
+//     method: "post",
+//     success: (response) => {
+//       if (response) {
+//         removeFromCartAlert()
+//         //alert("Are you sure to remove this product from cart?");
+//        // location.reload();
+//       }
+//     },
+//   });
+// }
 
-function removeFromCartAlert() {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#ff7300",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      location.reload()
+// function removeFromCartAlert() {
+//   Swal.fire({
+//     title: "Are you sure?",
+//     text: "You won't be able to revert this!",
+//     icon: "warning",
+//     showCancelButton: true,
+//     confirmButtonColor: "#ff7300",
+//     cancelButtonColor: "#d33",
+//     confirmButtonText: "Yes, delete it!",
+//   }).then((result) => {
+//     if (result.isConfirmed) {
+//       location.reload()
 
-    }
-  });
-}
+//     }
+//   });
+// }
 
 function addToWish(proId) {
   console.log("wish adding ajax");

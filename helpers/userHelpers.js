@@ -323,12 +323,13 @@ module.exports = {
   },
 
   changeProductQuantity: (data, user) => {
-    cart = data.cartId;
+    cart = data.cart;
     proId = data.product;
-    quantity = data.quantity;
-    count = data.count;
+    quantity = parseInt(data.quantity);
+    count = parseInt(data.count);
+    MRP = parseInt(data.MRP)
     const proCount = parseInt(count);
-    console.log(cart);
+    console.log('sldfkdl '+cart);
 
     return new Promise(async (resolve, reject) => {
       if (count == -1 && quantity == 1) {
@@ -358,7 +359,7 @@ module.exports = {
   subTotal: (user) => {
     let id = mongoose.Types.ObjectId(user);
     return new Promise(async (resolve, reject) => {
-      console.log("hi");
+
       const amount = await cartModel.aggregate([
         {
           $match: { user: id },
@@ -388,7 +389,6 @@ module.exports = {
             });
         });
         resolve();
-        console.log("haai");
       }
     });
   },
@@ -403,7 +403,7 @@ module.exports = {
           }
         )
         .then((response) => {
-          resolve({ removeProductFromCart: true });
+          resolve({ removeProduct: true });
         });
     });
   },
@@ -448,7 +448,7 @@ module.exports = {
   },
 
   deliveryCharge: (amount) => {
-    console.log(amount + " total");
+
     let Dcharge = 0;
     return new Promise((resolve, reject) => {
       if (amount > 1000) {
