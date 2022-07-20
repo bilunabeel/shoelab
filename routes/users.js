@@ -343,7 +343,7 @@ router.get('/checkout', verifyLogin, async (req, res) => {
 router.post('/place-order', async (req, res) => {
   const cartItems = await userHelpers.cartItems(req.session.userDetails._id);
   const totalAmount = await userHelpers.totalAmount(req.session.userDetails._id);
-  const netTotal = await totalAmount.grandTotal.total;
+  const netTotal = await totalAmount.grandTotal.Total;
   const deliveryCharges = await userHelpers.deliveryCharge(netTotal);
   const grandTotal = await userHelpers.grandTotal(netTotal, deliveryCharges);
 
