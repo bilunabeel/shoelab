@@ -20,7 +20,7 @@ router.get("/", function (req, res) {
     "no-cache,private, no-store, must-revalidate,max-stale=0,post-check=0,pre-check=0"
   );
   if (req.session.adminLoggedIn) {
-    res.redirect("/admin/admin-home", { admin: true });
+    res.redirect("/admin/admin-home", { adminDetails: true });
   } else {
     res.render("admin/admin-login", {
       layout: false,
