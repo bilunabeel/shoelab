@@ -10,6 +10,7 @@
     "body-parser": "^1.20.0",
     "bootstrap-icons": "^1.8.3",
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^16.0.1",
     "express": "~4.16.1",

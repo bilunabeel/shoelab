@@ -195,7 +195,7 @@ router.post("/add-product",
         console.log(response);
         req.flash("msg", "Product Added Successfully");
         res.redirect("/admin/add-product");
-      }).catch((err) => {})
+      }).catch((err) => { })
   }
 );
 
@@ -230,22 +230,22 @@ router.get("/edit-products/:id", async (req, res) => {
 router.post("/edit-products/:id", Storage.array('files', 4), async (req, res) => {
 
   let file = req.files
-  const imgArray = file.map((file)=>{
+  const imgArray = file.map((file) => {
     const img = fs.readFileSync(file.path)
     return (encode_image = img.toString('base64'))
   })
 
   const finalImg = []
-  await imgArray.map((src,index)=>{
+  await imgArray.map((src, index) => {
     const result = finalImg.push({
-      filename:file[index].originalName,
-      contentType:file[index].mimetype,
-      imageBase64:src
+      filename: file[index].originalName,
+      contentType: file[index].mimetype,
+      imageBase64: src
     })
     return result
   })
 
-  productHelpers.editProducts(req.params.id,finalImg,req.body).then(() => {
+  productHelpers.editProducts(req.params.id, finalImg, req.body).then(() => {
     res.redirect('/admin/admin-products')
   })
 }
@@ -323,12 +323,12 @@ router.get('/viewAdminOrderPros/:id', (req, res) => {
   })
 })
 
-router.get('/report',async(req,res)=>{
-  [orderCount,productCount] = await Promise.all([
+router.get('/report', async (req, res) => {
+  [orderCount, productCount] = await Promise.all([
     userHelpers.getOrderCount(),
     userHelpers.getProductCount()
   ])
-  res.render('admin/report',{orderCount,productCount,adminDetails:true,layout:'admin-layout'})
+  res.render('admin/report', { orderCount, productCount, adminDetails: true, layout: 'admin-layout' })
 })
 
 router.post("/getData", async (req, res) => {
