@@ -129,7 +129,7 @@
 					{{#each filterResult}}
 					<div class="col-lg-4 col-md-6">
 						<div class="single-product">
-							<img class="img-fluid" src="/uploads/{{this.Images.0.image1}}" alt="">
+							<img class="img-fluid" src="data:{{this.Images.0.contentType}};base64,{{this.Images.0.imageBase64}}" alt="" />
 							<div class="product-details">
 								<h6>{{this.Product_Name}}</h6>
 								<div class="price">
