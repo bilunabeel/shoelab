@@ -44,7 +44,7 @@
                                 <h5>₹{{pro_id.MRP}}</h5>
                             </td>
                             <td>
-                                <div class="product_count">
+                                <div id="productCount" class="product_count">
                                     <input type="text" name="quantity" maxlength="12" value="{{this.quantity}}"
                                         title="Quantity:" class="input-text qty">
                                     <button
@@ -134,10 +134,11 @@
 
                 if (response.removeProduct) {
                     alert('Are u sure to remove this Product from cart?')
-                    location.reload()
+                    $('#productCount').load(location.href + '#productCount')
 
                 } else {
                     location.reload()
+                    //$('#productCount').load(location.href + '#productCount')
                     let cou = parseInt(count)
                     let qu = parseInt(quantity)
                     let pr = parseInt(MRP)
