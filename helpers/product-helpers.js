@@ -7,6 +7,7 @@ const userData = require('../models/user')
 const { resolve, reject } = require("promise");
 const { default: mongoose } = require("mongoose");
 // const category = require("../models/category");
+const sharp = require('sharp')
 
 module.exports = {
   addBrandName: (brandData) => {

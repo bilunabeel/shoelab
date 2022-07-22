@@ -9,6 +9,7 @@ const adminHelpers = require('../helpers/adminHelpers')
 const moment = require('moment')
 const fs = require('fs');
 const { encode } = require("punycode");
+const sharp = require('sharp')
 
 
 
@@ -165,7 +166,7 @@ router.get("/add-product", async (req, res) => {
 
 router.post("/add-product",
   Storage.array('image'),
-  (req, res) => {
+  async(req, res) => {
 
     const { files } = req
 

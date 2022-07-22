@@ -101,7 +101,7 @@
 <!-- end features Area -->
 
 <!-- Start category Area -->
-<section class="category-area">
+{{!-- <section class="category-area">
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-lg-8 col-md-12">
@@ -165,7 +165,7 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> --}}
 <!-- End category Area -->
 {{/if}}
 <!-- start product Area -->
@@ -229,7 +229,7 @@
 
 						<img class="img-fluid" src="data:{{this.Images.0.contentType}};base64,{{this.Images.0.imageBase64}}" alt="" />
 						<div class="product-details">
-							<h6>{{this.Product_Name}}</h6>
+							<h6>{{this.Brand.barnd.Brand_Name}} {{this.Product_Name}}</h6>
 							<div class="price">
 								<h6>₹{{this.MRP}}</h6>
 								<h6 class="l-through">₹210.00</h6>
