@@ -17,7 +17,7 @@
     <div class="container">
         <div class="cart_inner">
             <div class="table-responsive">
-                <table class="table">
+                <table id="productCount" class="table">
 
                     <thead>
                         <tr>
@@ -43,7 +43,7 @@
                                 <h5>₹{{pro_id.MRP}}</h5>
                             </td>
                             <td>
-                                <div id="productCount" class="product_count">
+                                <div  class="product_count">
                                     <input type="text" name="quantity" maxlength="12" value="{{this.quantity}}"
                                         title="Quantity:" class="input-text qty">
                                     <button
