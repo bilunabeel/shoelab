@@ -30,18 +30,11 @@
 									class="lnr lnr-arrow-right"></span>Categories</span></a>
 							<ul class="collapse" id="fruitsVegetable" data-toggle="collapse" aria-expanded="false"
 								aria-controls="fruitsVegetable">
-								<li class="main-nav-list child">
-									<label class="custom-control ">
-										<input type="radio" class="custom-control-input" value="" name="Category">
-										<div class="custom-control-label">All
-										</div>
-									</label>
-								</li>
 								{{#each category}}
 								<li class="main-nav-list child">
 									<label class="custom-control ">
 										<input type="radio" class="custom-control-input" value="{{this._id}}"
-											name="Category">
+											name="category">
 										<div class="custom-control-label">{{this.Category}}
 										</div>
 									</label>
@@ -55,19 +48,13 @@
 									class="lnr lnr-arrow-right"></span>Subcategories</span></a>
 							<ul class="collapse" id="meatFish" data-toggle="collapse" aria-expanded="false"
 								aria-controls="meatFish">
-								<li class="main-nav-list child">
-									<label class="custom-control ">
-										<input type="radio" class="custom-control-input" value="" name="category">
-										<div class="custom-control-label">All
-										</div>
-									</label>
-								</li>
-								{{#each category}}
+								
+								{{#each subcategory}}
 								<li class="main-nav-list child">
 									<label class="custom-control ">
 										<input type="radio" class="custom-control-input" value="{{this._id}}"
-											name="category">
-										<div class="custom-control-label">{{this.Category}}
+											name="subcategory">
+										<div class="custom-control-label">{{this.Sub_category}}
 										</div>
 									</label>
 								</li>
@@ -78,13 +65,7 @@
 								aria-controls="meatFish"><span class="lnr lnr-arrow-right"></span>Brands</span></a>
 							<ul class="collapse" id="meatFish" data-toggle="collapse" aria-expanded="false"
 								aria-controls="meatFish">
-								<li class="main-nav-list child">
-									<label class="custom-control ">
-										<input type="radio" class="custom-control-input" value="" name="brand">
-										<div class="custom-control-label">All
-										</div>
-									</label>
-								</li>
+								
 								{{#each brands}}
 								<li class="main-nav-list child">
 									<label class="custom-control ">
@@ -129,7 +110,8 @@
 					{{#each filterResult}}
 					<div class="col-lg-4 col-md-6">
 						<div class="single-product">
-							<img class="img-fluid" src="data:{{this.Images.0.contentType}};base64,{{this.Images.0.imageBase64}}" alt="" />
+							<img class="img-fluid"
+								src="data:{{this.Images.0.contentType}};base64,{{this.Images.0.imageBase64}}" alt="" />
 							<div class="product-details">
 								<h6>{{this.Product_Name}}</h6>
 								<div class="price">
@@ -203,6 +185,7 @@
 	});
 </script> --}}
 
+{{!--
 <script type="text/javascript">
 	/*[ No ui ]
 	===========================================================*/
@@ -222,7 +205,7 @@
 	filterBar.noUiSlider.on('update', function (values, handle) {
 		skipValues[handle].innerHTML = Math.round(values[handle]);
 	});
-</script>
+</script> --}}
 
 <script>
 	$('input[name=brand]').change(function () {
@@ -234,11 +217,12 @@
 			success: (isResult) => {
 
 				if (isResult.status) {
-					$('#products').load(location.href + "#products");
+					$('#products').load(location.href + " #products");
 				}
 			}
 		})
 	});
+
 	$('input[name=Prize]').change(function () {
 		$.ajax({
 			url: '/search-filter',
@@ -247,22 +231,38 @@
 			success: (isResult) => {
 
 				if (isResult) {
-					$('#products').load(location.href + "#products");
+					$('#products').load(location.href + " #products");
 				}
 			}
 		})
 	});
-	$('input[name=Category]').change(function () {
+
+	$('input[name=category]').change(function () {
 		$.ajax({
 			url: '/search-filter',
 			method: "post",
 			data: $('#filter').serialize(),
 			success: (isResult) => {
 				if (isResult) {
-					$('#products').load(location.href + "#products");
+					$('#products').load(location.href + " #products");
+					//location.reload()
 				}
 			}
 		})
 
 	});
+
+	$('input[name=subcategory]').change(function(){
+		$.ajax({
+			url: '/search-filter',
+			method: 'post',
+			data:$('#filter').serialize(),
+			success: (isResult)=>{
+				if(isResult){
+
+				$('#products').load(location.href + ' #products')
+				}
+			}
+		})
+	})
 </script>

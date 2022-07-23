@@ -5,7 +5,7 @@ const subcategories = require("../models/subCategory");
 const productData = require("../models/productData");
 const userData = require('../models/user')
 const { resolve, reject } = require("promise");
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, mongo } = require("mongoose");
 // const category = require("../models/category");
 const sharp = require('sharp')
 
@@ -186,52 +186,131 @@ module.exports = {
     })
   },
 
-  searchFilter: (brandFilter, categoryFilter, price) => {
+  searchFilter: (categoryFilter,brandFilter,subcategoryFilter) => {
     console.log('ladsfjhkjhhhhhhhhhhhhhhhhhhhhhhhhhhh');
     return new Promise(async (resolve, reject) => {
       let result
-      if (brandFilter && categoryFilter) {
+      
+      if(categoryFilter && brandFilter){
+
         const brandId = mongoose.Types.ObjectId(brandFilter)
         const categoryId = mongoose.Types.ObjectId(categoryFilter)
         result = await productData.aggregate([
           {
-            $match: { Brand: brandId }
+            $match:{Category: categoryId}
           },
           {
-            $match: { Category: categoryId }
-          },
-          {
-            $match: { MRP: { $lt: price } }
+            $match:{Brand:brandId}
           }
         ])
-      } else if (brandFilter) {
+      }else if(categoryFilter && brandFilter && subcategoryFilter){
+
         const brandId = mongoose.Types.ObjectId(brandFilter)
-        result = await productData.aggregate([
-          {
-            $match: { Brand: brandId }
-          },
-          {
-            $match: { MRP: { $lt: price } }
-          }
-        ])
-      } else if (categoryFilter) {
+        const subcategoryId = mongoose.Types.ObjectId(subcategoryFilter)
         const categoryId = mongoose.Types.ObjectId(categoryFilter)
         result = await productData.aggregate([
           {
-            $match: { Category: categoryId }
+            $match:{Category: categoryId}
           },
           {
-            $match: { MRP: { $lt: price } }
+            $match:({Sub_category:subcategoryId})
+          },
+          {
+            $match:{Brand:brandId}
           }
         ])
-      } else {
+      }else if(categoryFilter  && subcategoryFilter){
+
+        const subcategoryId = mongoose.Types.ObjectId(subcategoryFilter)
+        const categoryId = mongoose.Types.ObjectId(categoryFilter)
         result = await productData.aggregate([
           {
-            $match: { MRP: { $lt: price } }
+            $match:{Category: categoryId}
+          },
+          {
+            $match:({Sub_category:subcategoryId})
+          },
+        ])
+      }else if( brandFilter && subcategoryFilter){
+
+        const brandId = mongoose.Types.ObjectId(brandFilter)
+        const subcategoryId = mongoose.Types.ObjectId(subcategoryFilter)
+    
+        result = await productData.aggregate([
+          {
+            $match:({Sub_category:subcategoryId})
+          },
+          {
+            $match:{Brand:brandId}
+          }
+        ])
+      }else if(subcategoryFilter){
+        const subcategoryId = mongoose.Types.ObjectId(subcategoryFilter)
+        result = await productData.aggregate([
+          {
+            $match:{Sub_category:subcategoryId}
+          }
+        ])
+      }
+      else if(categoryFilter){
+        const categoryId = mongoose.Types.ObjectId(categoryFilter)
+        result = await productData.aggregate([
+          {
+            $match:{Category:categoryId}
+          }
+        ])
+      }else if(brandFilter){
+        const brandId = mongoose.Types.ObjectId(brandFilter)
+        result = await productData.aggregate([
+          {
+            $match:{Brand:brandId}
           }
         ])
       }
       resolve(result)
+
+      // if (brandFilter && categoryFilter) {
+      //   const brandId = mongoose.Types.ObjectId(brandFilter)
+      //   const categoryId = mongoose.Types.ObjectId(categoryFilter)
+      //   result = await productData.aggregate([
+      //     {
+      //       $match: { Brand: brandId }
+      //     },
+      //     {
+      //       $match: { Category: categoryId }
+      //     },
+      //     {
+      //       $match: { MRP: { $lt: price } }
+      //     }
+      //   ])
+      // } else if (brandFilter) {
+      //   const brandId = mongoose.Types.ObjectId(brandFilter)
+      //   result = await productData.aggregate([
+      //     {
+      //       $match: { Brand: brandId }
+      //     },
+      //     {
+      //       $match: { MRP: { $lt: price } }
+      //     }
+      //   ])
+      // } else if (categoryFilter) {
+      //   const categoryId = mongoose.Types.ObjectId(categoryFilter)
+      //   result = await productData.aggregate([
+      //     {
+      //       $match: { Category: categoryId }
+      //     },
+      //     {
+      //       $match: { MRP: { $lt: price } }
+      //     }
+      //   ])
+      // } else {
+      //   result = await productData.aggregate([
+      //     {
+      //       $match: { MRP: { $lt: price } }
+      //     }
+      //   ])
+      // }
+      // resolve(result)
     })
   },
 

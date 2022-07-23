@@ -8,7 +8,8 @@ const productHelpers = require('../helpers/product-helpers');
 const productData = require('../models/productData');
 const { addAddress } = require('../helpers/userHelpers');
 const adminHelpers = require('../helpers/adminHelpers')
-const moment = require('moment')
+const moment = require('moment');
+const { getProducts } = require('../helpers/product-helpers');
 
 const verifyLogin = (req, res, next) => {
   if (req.session.userDetails) {
@@ -566,6 +567,8 @@ router.post('/apply-coupon', (req, res) => {
   })
 });
 
+let filterResult;
+
 router.post('/search',async(req,res)=>{
   let key = req.body.key
   productHelpers.getSearchProducts(key).then((response)=>{
@@ -584,39 +587,41 @@ router.get('/shop',(req,res)=>{
 })
 
 router.get('/filterPage',async(req,res)=>{
-  let cartcount = "";
+  let cartcount = null;
   let user = req.session.userDetails;
   if (user) {
     cartcount = await userHelpers.getCartCount(req.session.userDetails._id);
   }
+  const subcategory = await productHelpers.getSubcategories()
   let category = await productHelpers.getCategories();
   let brands = await productHelpers.getBrands()
   res.render("user/shop/shop", {
     filterResult,
     category,
     brands,
+    subcategory,
     cartcount,
     user
   });
 })
 
-router.get('/filterBrands/:id',(req,res)=>{
-  const brandFilter = req.params.id
-  productHelpers.filterBrands(brandFilter).then((result)=>{
-    filterResult = result
+// router.get('/filterBrands/:id',(req,res)=>{
+//   const brandFilter = req.params.id
+//   productHelpers.filterBrands(brandFilter).then((result)=>{
+//     filterResult = result
 
-    res.redirect('/filterPage')
-  })
-})
+//     res.redirect('/filterPage')
+//   })
+// })
 
-router.post('/search-filter',(req,res)=>{
+router.post('/search-filter',async(req,res)=>{
   const a = req.body
   const price = parseInt(a.MRP)
   const brandFilter= a.brand
   const categoryFilter = a.category
+  const subcategoryFilter = a.subcategory
+  productHelpers.searchFilter(categoryFilter,brandFilter,subcategoryFilter).then((result)=>{
 
-  productHelpers.searchFilter(brandFilter,categoryFilter,price).then((result)=>{
-    console.log('returnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
     filterResult = result
     res.json({status:true})
   })
