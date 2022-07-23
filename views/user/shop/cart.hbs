@@ -132,11 +132,11 @@
 
                 if (response.removeProduct) {
                     alert('Are u sure to remove this Product from cart?')
-                    $('#productCount').load(location.href + '#productCount')
+                    $('#productCount').load(location.href + ' #productCount')
 
                 } else {
-                    location.reload()
-                    //$('#productCount').load(location.href + '#productCount')
+                    //location.reload()
+                    $('#productCount').load(location.href + ' #productCount')
                     let cou = parseInt(count)
                     let qu = parseInt(quantity)
                     let pr = parseInt(MRP)
