@@ -17,6 +17,7 @@ const orderSchema = new mongoose.Schema({
       quantity: { type: Number, default: 1,},
       subtotal: {  type: Number,default: 0,},
       orderCancelled:{type:Boolean,default:false},
+      orderDelivered:{type:Boolean,default:false},
       productName:{type:String},
       status: { type: String, default: 'Order Placed', },
     },

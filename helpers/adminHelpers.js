@@ -1,30 +1,30 @@
-const mongoose = require ('mongoose');
-const {resolve, reject} = require ('promise');
-const adminDatas = require ('../models/adminData');
+const mongoose = require('mongoose');
+const { resolve, reject } = require('promise');
+const adminDatas = require('../models/adminData');
 const couponData = require('../models/coupon');
 const orderModel = require('../models/order');
 const userdatas = require('../models/user')
 
 module.exports = {
   doAdminLogin: adminData => {
-    return new Promise (async (resolve, reject) => {
-      const admin = await adminDatas.findOne ({Username: adminData.Username});
+    return new Promise(async (resolve, reject) => {
+      const admin = await adminDatas.findOne({ Username: adminData.Username });
 
       let response = {};
 
       if (admin) {
         if (adminData.Password == admin.Password) {
-          console.log ('Admin Login Success...');
+          console.log('Admin Login Success...');
           response.admin = admin;
           response.status = true;
-          resolve (response);
+          resolve(response);
         } else {
-          console.log ('Admin Login Failed...');
-          resolve ({status: false});
+          console.log('Admin Login Failed...');
+          resolve({ status: false });
         }
       } else {
-        console.log ('Admin Login Failed...');
-        resolve ({status: false});
+        console.log('Admin Login Failed...');
+        resolve({ status: false });
       }
     });
   },
@@ -55,9 +55,9 @@ module.exports = {
 
   addCoupon: (data) => {
 
-    return new Promise (async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
-      const newCoupon = new couponData ({
+      const newCoupon = new couponData({
         couponName: data.couponName,
         couponCode: data.couponCode,
         limit: data.limit,
@@ -69,18 +69,44 @@ module.exports = {
     });
   },
 
-  getAllCoupons:()=>{
-    return new Promise(async(resolve,reject)=>{
-        const allCoupons = await couponData.find({}).lean()
-        resolve(allCoupons)
+  getAllCoupons: () => {
+    return new Promise(async (resolve, reject) => {
+      const allCoupons = await couponData.find({}).lean()
+      resolve(allCoupons)
     })
   },
 
-  deleteCoupon:(couponId)=>{
+  deleteCoupon: (couponId) => {
     console.log('delete coup helpers');
-    return new Promise(async(resolve,reject)=>{
-        const deleteCoupon = await couponData.findByIdAndDelete({_id:couponId})
-        resolve(deleteCoupon)
+    return new Promise(async (resolve, reject) => {
+      const deleteCoupon = await couponData.findByIdAndDelete({ _id: couponId })
+      resolve(deleteCoupon)
+    })
+  },
+
+  changeOrderStatus: (data) => {
+    console.log('data inside helpers');
+    console.log(data);
+    return new Promise(async (resolve, reject) => {
+      let state;
+      if(data.orderStatus == 'Delivered'){
+        state = await orderModel.findOneAndUpdate(
+          {_id:data.orderId, "product._id":data.proId},
+          {
+            $set:{"product.$.status": data.orderStatus , 'product.$.orderDelivered':true}
+          },
+        )
+      }else{
+
+        state = await orderModel.findOneAndUpdate(
+          { _id: data.orderId , "product._id" : data.proId },
+          {
+            $set: { "product.$.status": data.orderStatus,'product.$.orderDelivered':false }
+          }
+        )
+      }
+      
+      resolve()
     })
   },
 

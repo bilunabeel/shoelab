@@ -317,10 +317,19 @@ router.get('/manage-orders', async (req, res) => {
 })
 
 router.get('/viewAdminOrderPros/:id', (req, res) => {
-  userHelpers.getOrderProducts(req.params.id).then(async (response) => {
-    const cartCount = await userHelpers.getCartCount()
+  userHelpers.getOrderProducts(req.params.id).then((response) => {
     const order = response
-    res.render('admin/viewAdminOrderPros', { cartCount, adminDetails: true, layout: 'admin-layout' })
+    const ordered_on = moment(order.ordered_on).format("MMM Do YY");
+    res.render('admin/viewAdminOrdersPros', {order,ordered_on, adminDetails: true, layout: 'admin-layout' })
+  })
+})
+
+router.post('/changeOrderStatus',(req,res)=>{
+  console.log(req.body);
+  console.log('change inside');
+
+  adminHelpers.changeOrderStatus(req.body).then((response)=>{
+    res.redirect('/admin/manage-orders')
   })
 })
 

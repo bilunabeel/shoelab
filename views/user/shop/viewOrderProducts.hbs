@@ -37,7 +37,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-2">
-                      <img src="/uploads/{{pro_id.Images.[0].image1}}" class="img-fluid" alt="Phone">
+                      <img src="data:{{this.pro_id.Images.0.contentType}};base64,{{this.pro_id.Images.0.imageBase64}}" class="img-fluid" alt="Phone">
                     </div>
                     <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0">{{this.pro_id.Product_Name}}</p>
@@ -46,7 +46,7 @@
                       <p class="text-muted mb-0 small">x {{this.quantity}}</p>
                     </div>
 
-                    <div class="col-md-1text-center d-flex justify-content-center align-items-center">
+                    <div class="col-md-1 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0 small">₹{{this.subtotal}}</p>
                     </div>
                     <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
@@ -54,6 +54,7 @@
                       </p>
                     </div>
                     {{#if this.orderCancelled}}
+                    {{else if this.orderDelivered}}
                     {{else}}
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                       <button class="btn btn-danger cancel-order" style="width: 120px; font-size: small ;"

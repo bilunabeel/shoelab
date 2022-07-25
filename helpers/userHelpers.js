@@ -451,7 +451,7 @@ module.exports = {
 
     let Dcharge = 0;
     return new Promise((resolve, reject) => {
-      if (amount > 1000) {
+      if (amount > 2000) {
         Dcharge = 40;
       } else {
         Dcharge = 0;
@@ -600,7 +600,8 @@ module.exports = {
       total = parseInt(order.total) + parseInt(deliveryCharges)
       let id = mongoose.Types.ObjectId(user._id);
       const status = order["paymentMethod"] === "Cash on Delivery" ? "Order Placed" : "Order Pending";
-
+console.log(deliveryCharges);
+console.log('gdfg');
       const orderObj = await orderModel({
         user_Id: user._id,
         Total: netTotal,

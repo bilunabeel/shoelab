@@ -42,7 +42,7 @@
                 <th>User</th>
                 <th>Total</th>
                 <th>Payment Method</th>
-                <th>Payment Status</th>
+                <th>Status</th>
                 <th>Details</th>
               </tr>
             </thead>
@@ -57,7 +57,7 @@
                 <td>{{this.grandTotal}}</td>
                 <td>{{this.paymentMethod}}</td>
                 <td>{{this.payment_status}}</td>
-                <td><a href="/viewAdminOrdersPros/{{this._id}}" class="btn btn-primary">More...</a></td>
+                <td><a href="/admin/viewAdminOrderPros/{{this._id}}" class="btn btn-primary">More...</a></td>
               </tr>
               {{/each}}
             </tbody>

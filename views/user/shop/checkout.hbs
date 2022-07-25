@@ -122,28 +122,17 @@
                         </div>
                         <div class="col-md-6 form-group p_star">
                             <input type="text" class="form-control" placeholder="Last Name" id="lname" name="lname" required>
-
                         </div>
+                        <input type="text" class="form-control" id="#" name="userId" value="{{addresses._id}}" hidden/>
 
-                        <input type="text" class="form-control" id="#" name="userId" value="{{addresses._id}}" hidden />
-
-
-                        <div class="col-md-12 form-group" >
                             <input type="text" class="form-control" id="discountedPrice" name="discountedPrice"
-                                value="0" />
-                        </div>
-                        <div class="col-md-12 form-group" >
+                                value="0" hidden/>
                             <input type="number" class="form-control" id="MainTotal" name="mainTotal"
-                                value="{{grandTotal}}"  />
-                        </div>
-                        <div class="col-md-12 form-group" >
+                                value="{{grandTotal}}" hidden/>
                             <input type="text" class="form-control" id="couponName" name="couponName"
-                                value="No Coupon Applied"  />
-                        </div>
-                        <div class="col-md-12 form-group" >
+                                value="No Coupon Applied" hidden/>
                             <input type="number" class="form-control" id="discountAmountPercentage"
-                                name="discountAmountPercentage"  value="0" />
-                        </div>
+                                name="discountAmountPercentage"  value="0" hidden/>
 
 
                         <div class="col-md-12 form-group">
