@@ -111,6 +111,8 @@ module.exports = {
   },
 
   salesReport: (data) => {
+    //console.log('data inside helpers');
+
     let response = {};
     let { startDate, endDate } = data;
     let d1, d2, text;
@@ -127,6 +129,7 @@ module.exports = {
     const date = new Date(Date.now());
     const month = date.toLocaleString("default", { month: "long" });
     return new Promise(async (resolve, reject) => {
+
       let salesReport = await orderModel.aggregate([
         {
           $match: {
@@ -137,7 +140,7 @@ module.exports = {
           },
         },
         {
-          $match: { payment_status: "placed" },
+          $match: { payment_status: "Order Placed" },
         },
         {
           $group: {
@@ -146,9 +149,10 @@ module.exports = {
           },
         },
       ]);
+
       let brandReport = await orderModel.aggregate([
         {
-          $match: { payment_status: "placed" },
+          $match: { payment_status: "Order Placed" },
         },
         {
           $unwind: "$product",
@@ -169,12 +173,14 @@ module.exports = {
         { $sort: { quantity: -1 } },
         { $limit: 5 },
       ]);
+
       let orderCount = await orderModel
         .find({ date: { $gt: d1, $lt: d2 } })
         .count();
+
       let totalAmounts = await orderModel.aggregate([
         {
-          $match: { payment_status: "placed" },
+          $match: { payment_status: "Order Placed" },
         },
         {
           $group: {
@@ -183,9 +189,10 @@ module.exports = {
           },
         },
       ]);
+
       let totalAmountRefund = await orderModel.aggregate([
         {
-          $match: { status: "placed" },
+          $match: { payment_status: "Order Placed" },
         },
         {
           $group: {
@@ -197,8 +204,9 @@ module.exports = {
       response.salesReport = salesReport;
       response.brandReport = brandReport;
       response.orderCount = orderCount;
-      response.totalAmountPaid = totalAmounts.totalAmount;
-      response.totalAmountRefund = totalAmountRefund.totalAmount;
+      response.totalAmountPaid = totalAmounts[0].totalAmount;
+      response.totalAmountRefund = totalAmountRefund[0].totalAmount;
+      console.log(totalAmountRefund[0].totalAmount);
       resolve(response);
     });
   },

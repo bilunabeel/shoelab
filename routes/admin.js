@@ -341,11 +341,16 @@ router.get('/report', async (req, res) => {
   res.render('admin/report', { orderCount, productCount, adminDetails: true, layout: 'admin-layout' })
 })
 
-router.post("/getData", async (req, res) => {
+router.post("/getData", (req, res) => {
+  //console.log("getData");
+  
   const date = new Date(Date.now());
   const month = date.toLocaleString("default", { month: "long" });
+
   adminHelpers.salesReport(req.body).then((data) => {
-    let pendingAmount = data.pendingAmount;
+    console.log(data);
+
+    //let pendingAmount = data.pendingAmount;
     let salesReport = data.salesReport;
     let brandReport = data.brandReport;
     let orderCount = data.orderCount;
@@ -372,7 +377,6 @@ router.post("/getData", async (req, res) => {
       sumArray,
       orderCount,
       totalAmountPaid,
-      pendingAmount,
     });
   });
 });
