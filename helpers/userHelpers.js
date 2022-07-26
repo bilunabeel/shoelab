@@ -576,7 +576,7 @@ module.exports = {
   getOrderProducts: (orderId) => {
     return new Promise(async (resolve, reject) => {
       const orderDetails = await orderModel.findOne({ _id: orderId }).populate("product.pro_id").lean();
-
+      console.log(orderDetails);
       resolve(orderDetails);
     });
   },
@@ -600,8 +600,10 @@ module.exports = {
       total = parseInt(order.total) + parseInt(deliveryCharges)
       let id = mongoose.Types.ObjectId(user._id);
       const status = order["paymentMethod"] === "Cash on Delivery" ? "Order Placed" : "Order Pending";
-console.log(deliveryCharges);
-console.log('gdfg');
+
+      console.log('delivery charge: '+deliveryCharges);
+      console.log("order total: "+order.total);
+
       const orderObj = await orderModel({
         user_Id: user._id,
         Total: netTotal,

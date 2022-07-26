@@ -347,7 +347,7 @@ router.post('/place-order', async (req, res) => {
   const netTotal = await totalAmount.grandTotal.total
   const deliveryCharges = await userHelpers.deliveryCharge(netTotal);
   const grandTotal = await userHelpers.grandTotal(netTotal, deliveryCharges);
-
+console.log(netTotal);
   userHelpers
     .placeOrder(
       req.body,
@@ -359,7 +359,7 @@ router.post('/place-order', async (req, res) => {
     ).then((response) => {
       req.session.orderId = response._id
       if (req.body['paymentMethod'] == 'Cash on Delivery') {
-        console.log('paymnet cod...............');
+        
         res.json({ CODsuccess: true })
       } else {
         userHelpers.generateRazorpay(response._id, req.body.mainTotal).then((response) => {
@@ -383,20 +383,20 @@ router.get('/order-success', verifyLogin, async (req, res) => {
     const user = req.session.userDetails
     cartCount = await userHelpers.getCartCount(req.session.userDetails._id)
    // const ordered_on = moment(orderProducts.ordered_on).format('MMM Do YY')
-    
+    console.log(orderProducts);
     res.render('user/shop/order-success', { orderProducts, cartCount,  user });
   })
 });
 
 router.get('/my-order', verifyLogin, async (req, res) => {
-  console.log('lsdofhkj');
+  
   userHelpers.getAllOrders(req.session.userDetails._id).then((response) => {
     const orders = response
 
     orders.forEach(element => {
       element.ordered_on = moment(element.ordered_on).format('MMM Do YY')
     });
-    console.log(orders);
+  
     res.render('user/shop/my-order', {
       user: req.session.userDetails,
       orders,

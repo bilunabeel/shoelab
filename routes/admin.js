@@ -329,7 +329,7 @@ router.post('/changeOrderStatus',(req,res)=>{
   console.log('change inside');
 
   adminHelpers.changeOrderStatus(req.body).then((response)=>{
-    res.redirect('/admin/manage-orders')
+    res.redirect('/admin/viewAdminOrdersPros')
   })
 })
 
