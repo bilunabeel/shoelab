@@ -361,13 +361,14 @@ router.post("/getData", (req, res) => {
     let totalArray = [];
     salesReport.forEach((s) => {
       dateArray.push(`${month}-${s._id} `);
-      totalArray.push(s.Total);
+      totalArray.push(s.total);
     });
     let brandArray = [];
     let sumArray = [];
     brandReport.forEach((s) => {
       brandArray.push(s._id);
       sumArray.push(s.totalAmount);
+      console.log(brandArray);
     });
     res.json({
       totalAmountRefund,
@@ -377,6 +378,7 @@ router.post("/getData", (req, res) => {
       sumArray,
       orderCount,
       totalAmountPaid,
+
     });
   });
 });

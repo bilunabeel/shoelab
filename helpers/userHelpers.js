@@ -16,8 +16,7 @@ const { promises } = require("nodemailer/lib/xoauth2");
 const { log } = require("console");
 const wishlist = require("../models/wishlist");
 const couponData = require("../models/coupon");
-require('dotenv').config()
-
+require("dotenv").config();
 
 const instance = new Razorpay({
   key_id: process.env.RAZORPAY_ID,
@@ -98,7 +97,7 @@ module.exports = {
 
       if (user) {
         if (user.block) {
-          reject({ status: false, msg: 'Admin Blocked you!' })
+          reject({ status: false, msg: "Admin Blocked you!" });
         } else {
           bcrypt.compare(userData.Password, user.Password).then((status) => {
             if (status) {
@@ -205,9 +204,9 @@ module.exports = {
 
   isUserBlock: (userId) => {
     return new Promise(async (resolve, reject) => {
-      const user = await userdatas.findOne({ _id: userId })
-      resolve(user)
-    })
+      const user = await userdatas.findOne({ _id: userId });
+      resolve(user);
+    });
   },
 
   getProductDetails: (proId) => {
@@ -234,7 +233,8 @@ module.exports = {
         const proExist = userCart.products.findIndex(
           (products) => products.pro_id == proId
         );
-        console.log(proExist);
+
+        console.log('exist: '+proExist);
         if (proExist != -1) {
           console.log(proId);
           cartModel
@@ -243,18 +243,29 @@ module.exports = {
               { $inc: { "products.$.quantity": 1 } }
             )
             .then((response) => {
-              resolve({ proName: product.Product_Name, msg: 'quantity added' });
+              resolve({
+                productName: product.Product_Name,
+                msg: "quantity added",
+              });
             });
         } else {
           // if product not exists, add new product id
           await cartModel
             .findOneAndUpdate(
               { user: userId },
-              { $push: { products: { pro_id: proId, MRP: product.MRP } } }
+              {
+                $push: {
+                  products: {
+                    pro_id: proId,
+                    productName: product.Product_Name,
+                    MRP: product.MRP,
+                  },
+                },
+              }
             )
-            .then((response) => {
+            .then(async (response) => {
               resolve({
-                proName: product.Product_Name,
+                productName: product.Product_Name,
                 msg: "'Added',count: res.products.length + 1",
               });
             });
@@ -263,7 +274,11 @@ module.exports = {
         // if user not exists in cart, create new doc for the user and add product id
         const cartObj = new cartModel({
           user: userId,
-          products: { pro_id: proId, MRP: product.MRP },
+          products: {
+            pro_id: proId,
+            productName: product.Product_Name,
+            MRP: product.MRP,
+          },
         });
         await cartObj.save((err, result) => {
           if (err) {
@@ -271,7 +286,7 @@ module.exports = {
           } else {
             console.log("hoooy...!");
             resolve({
-              proName: product.Product_Name,
+              productName: product.Product_Name,
               msg: "cart is added",
               count: 1,
             });
@@ -287,12 +302,13 @@ module.exports = {
       cartModel
         .findOne({ user: userId })
         .populate(["products.pro_id"])
-        .lean().then((response) => {
-          resolve(response)
-        }).catch((err) => {
-          reject({ err, msg: 'cart error' })
+        .lean()
+        .then((response) => {
+          resolve(response);
         })
-
+        .catch((err) => {
+          reject({ err, msg: "cart error" });
+        });
     });
   },
 
@@ -300,11 +316,10 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       const cartDetails = await cartModel
         .findOne({ user: userId })
-        .populate(["products.pro_id"])
+        .populate("products.pro_id")
         .lean();
-
-      resolve(cartDetails)
-
+      console.log(cartDetails);
+      resolve(cartDetails);
     });
   },
 
@@ -327,9 +342,9 @@ module.exports = {
     proId = data.product;
     quantity = parseInt(data.quantity);
     count = parseInt(data.count);
-    MRP = parseInt(data.MRP)
+    MRP = parseInt(data.MRP);
     const proCount = parseInt(count);
-    console.log('sldfkdl '+cart);
+    console.log("sldfkdl " + cart);
 
     return new Promise(async (resolve, reject) => {
       if (count == -1 && quantity == 1) {
@@ -359,7 +374,6 @@ module.exports = {
   subTotal: (user) => {
     let id = mongoose.Types.ObjectId(user);
     return new Promise(async (resolve, reject) => {
-
       const amount = await cartModel.aggregate([
         {
           $match: { user: id },
@@ -448,7 +462,6 @@ module.exports = {
   },
 
   deliveryCharge: (amount) => {
-
     let Dcharge = 0;
     return new Promise((resolve, reject) => {
       if (amount > 2000) {
@@ -518,16 +531,14 @@ module.exports = {
           },
         },
       ]);
-      resolve(address)
+      resolve(address);
     });
   },
 
-  editAddress:(addressId,userId)=>{
-    return new Promise(async(resolve,reject)=>{
-      const editAddress = await userdatas.findByIdAndUpdate({
-
-      })
-    })
+  editAddress: (addressId, userId) => {
+    return new Promise(async (resolve, reject) => {
+      const editAddress = await userdatas.findByIdAndUpdate({});
+    });
   },
 
   deleteAddress: (addressId, userId) => {
@@ -542,21 +553,27 @@ module.exports = {
 
   editProfile: (data, userId) => {
     return new Promise(async (resolve, reject) => {
-      const editProfile =
-        await userdatas.findByIdAndUpdate(
-          { _id: userId },
-          { $set: { Firstname: data.Firstname, Lastname: data.Lastname, Mobile: data.Mobile } }
-        )
+      const editProfile = await userdatas.findByIdAndUpdate(
+        { _id: userId },
+        {
+          $set: {
+            Firstname: data.Firstname,
+            Lastname: data.Lastname,
+            Mobile: data.Mobile,
+          },
+        }
+      );
 
-      resolve(editProfile)
-    })
+      resolve(editProfile);
+    });
   },
 
   getAllOrders: (user) => {
     return new Promise(async (resolve, reject) => {
       const allOrders = await orderModel
         .find({ userId: user })
-        .populate("product.pro_id").sort({ _id: -1 })
+        .populate("product.pro_id")
+        .sort({ _id: -1 })
         .lean();
       resolve(allOrders);
     });
@@ -575,34 +592,40 @@ module.exports = {
 
   getOrderProducts: (orderId) => {
     return new Promise(async (resolve, reject) => {
-      const orderDetails = await orderModel.findOne({ _id: orderId }).populate("product.pro_id").lean();
+      const orderDetails = await orderModel
+        .findOne({ _id: orderId })
+        .populate("product.pro_id")
+        .lean();
       console.log(orderDetails);
       resolve(orderDetails);
     });
   },
 
-  getOrderCount:()=>{
-    return new Promise(async(resolve,reject)=>{
-      const orderCount = await orderModel.find({}).count()
-      resolve(orderCount)
-    })
+  getOrderCount: () => {
+    return new Promise(async (resolve, reject) => {
+      const orderCount = await orderModel.find({}).count();
+      resolve(orderCount);
+    });
   },
 
-  getProductCount:()=>{
-    return new Promise(async(resolve,reject)=>{
-      const productCount = await productModel.find({}).count()
-      resolve(productCount)
-    })
+  getProductCount: () => {
+    return new Promise(async (resolve, reject) => {
+      const productCount = await productModel.find({}).count();
+      resolve(productCount);
+    });
   },
 
   placeOrder: (order, products, total, deliveryCharges, netTotal, user) => {
     return new Promise(async (resolve, reject) => {
-      total = parseInt(order.total) + parseInt(deliveryCharges)
+      total = parseInt(order.total) + parseInt(deliveryCharges);
       let id = mongoose.Types.ObjectId(user._id);
-      const status = order["paymentMethod"] === "Cash on Delivery" ? "Order Placed" : "Order Pending";
+      const status =
+        order["paymentMethod"] === "Cash on Delivery"
+          ? "Order Placed"
+          : "Order Pending";
 
-      console.log('delivery charge: '+deliveryCharges);
-      console.log("order total: "+order.total);
+      console.log("delivery charge: " + deliveryCharges);
+      console.log("order total: " + order.total);
 
       const orderObj = await orderModel({
         user_Id: user._id,
@@ -629,31 +652,33 @@ module.exports = {
           pincode: order.pincode,
         },
       });
+      console.log("hgsrfdhs" + products);
 
       await orderObj.save(async (err, res) => {
         const data = await cartModel.aggregate([
           {
-            $match: { user: id }
+            $match: { user: id },
           },
           {
-            $unwind: "$products"
+            $unwind: "$products",
           },
           {
             $project: {
               quantity: "$products.quantity",
-              id: "$products.pro_id"
-            }
-          }
-        ])
+              id: "$products.pro_id",
+            },
+          },
+        ]);
         data.forEach(async (amt) => {
           await productModel.findOneAndUpdate(
             {
-              _id: amt.id
-            }, {
-            $inc: { Stock: -(amt.quantity) }
-          }
-          )
-        })
+              _id: amt.id,
+            },
+            {
+              $inc: { Stock: -amt.quantity },
+            }
+          );
+        });
         await cartModel.remove({ user: order.userId });
         resolve(orderObj);
       });
@@ -686,8 +711,8 @@ module.exports = {
 
       hmac.update(
         details["payment[razorpay_order_id]"] +
-        "|" +
-        details["payment[razorpay_payment_id]"]
+          "|" +
+          details["payment[razorpay_payment_id]"]
       );
       hmac = hmac.digest("hex");
       if (hmac == details["payment[razorpay_signature]"]) {
@@ -714,13 +739,15 @@ module.exports = {
   },
 
   cancelOrder: (data) => {
-    order = mongoose.Types.ObjectId(data.orderId)
-    let quantity = parseInt(data.quantity)
-    discountPrice = parseInt(data.subtotal) -
-      ((parseInt(data.couponPercentage) * parseInt(data.subtotal)) / 100).toFixed(  
-        0
-      )
-    const status = 'Order Cancelled'
+    order = mongoose.Types.ObjectId(data.orderId);
+    let quantity = parseInt(data.quantity);
+    discountPrice =
+      parseInt(data.subtotal) -
+      (
+        (parseInt(data.couponPercentage) * parseInt(data.subtotal)) /
+        100
+      ).toFixed(0);
+    const status = "Order Cancelled";
 
     return new Promise(async (resolve, reject) => {
       const cancelOrder = await orderModel.updateMany(
@@ -728,23 +755,23 @@ module.exports = {
         {
           $set: {
             "product.$.status": status,
-            "product.$.orderCancelled": true
+            "product.$.orderCancelled": true,
           },
           $inc: {
             grandTotal: -discountPrice,
             "product.$.subtotal": -parseInt(data.subtotal),
-            reFund: discountPrice
-          }
+            reFund: discountPrice,
+          },
         }
-      )
+      );
       await productModel.findOneAndUpdate(
         { _id: data.proId },
         {
           $inc: {
-            Stock: quantity
-          }
+            Stock: quantity,
+          },
         }
-      )
+      );
       let prodcuts = await orderModel.aggregate([
         {
           $match: { _id: order },
@@ -752,28 +779,31 @@ module.exports = {
         {
           $project: {
             _id: 0,
-            product: 1
-          }
+            product: 1,
+          },
         },
         {
-          $unwind: "$product"
+          $unwind: "$product",
         },
         {
-          $match: { "product.orderCancelled": false }
-        }
-      ])
+          $match: { "product.orderCancelled": false },
+        },
+      ]);
       if (prodcuts.length == 0) {
         await orderModel.updateMany(
           { _id: data.orderId },
           {
-            $inc: { reFund: data.shippingCharges, grandTotal: -data.shippingCharges },
+            $inc: {
+              reFund: data.shippingCharges,
+              grandTotal: -data.shippingCharges,
+            },
           }
-        )
-        resolve({ status: true })
+        );
+        resolve({ status: true });
       } else {
-        resolve({ status: true })
+        resolve({ status: true });
       }
-    })
+    });
   },
 
   addToWish: (proId, userId) => {
@@ -839,7 +869,6 @@ module.exports = {
 
   validateCoupon: (data, userId) => {
     return new Promise(async (resolve, reject) => {
-
       obj = {};
 
       const coupon = await couponData.findOne({ couponCode: data.coupon });
@@ -853,7 +882,7 @@ module.exports = {
           if (checkUserUsed) {
             obj.couponUsed = true;
             obj.msg = "You have already used a Coupon";
-            resolve(obj)
+            resolve(obj);
             console.log(obj);
           } else {
             console.log(data.coupon);
@@ -890,13 +919,10 @@ module.exports = {
           resolve(obj);
         }
       } else {
-        obj.invalidCoupon = true
-        console.log('This coupon is invalid');
-        resolve(obj)
+        obj.invalidCoupon = true;
+        console.log("This coupon is invalid");
+        resolve(obj);
       }
     });
   },
-
-
-
 };

@@ -174,6 +174,8 @@ module.exports = {
         { $limit: 5 },
       ]);
 
+      console.log(brandReport);
+
       let orderCount = await orderModel
         .find({ date: { $gt: d1, $lt: d2 } })
         .count();

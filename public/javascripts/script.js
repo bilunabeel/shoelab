@@ -20,7 +20,7 @@ function addToCart(proId) {
 
 function addToCartAlert(response) {
   Swal.fire({
-    title: `${response.response.proName} was added to Cart`,
+    title: `${response.response.productName} was added to Cart`,
     icon: "success",
     confirmButtonColor: "#3085d6",
     confirmButtonText: "OK",

@@ -23,7 +23,8 @@ const cartSchema = new Schema({
         },
         subtotal:{
             type:Number
-        }
+        },
+        productName:{type:String}
     }],
     
     created_at :{type:Date, required:true,default:Date.now}

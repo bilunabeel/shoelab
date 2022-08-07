@@ -32,7 +32,7 @@
                 <div class="col-lg-4 col-md-4 order-1">
                     <div class="row">
                         <div class="col-lg-6 col-md-12 col-6 mb-4">
-                            <div class="card">
+                            <div class="card" style="width: 24rem;">
                                 <div class="card-body">
                                     <div class="card-title d-flex align-items-start justify-content-between">
 
@@ -48,6 +48,9 @@
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12 col-6 mb-4">
+                           
+                        </div>
+                        <div class="col-lg-6 col-md-12 col-6 mb-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-title d-flex align-items-start justify-content-between">
@@ -60,6 +63,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-6 col-md-12 col-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div>
+                                        <h6>Total Orders</h6>
+                                    </div>
+                                    <h3 id="totalOrder" class="card-title mb-2">{{orderCount}}</h3>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-12 col-6 mb-4">
@@ -68,148 +81,46 @@
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">
                                 This Week Earnings</h6>
-                            <div class="dropdown no-arrow">
-
-                            </div>
                         </div>
-                        <!-- Card Body -->
                         <div class="card-body mb-3">
                             <div class="chart-area">
-                                <canvas id="mychart"></canvas>
+                                <canvas width="200" height="80" id="mychart"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Total Revenue -->
 
                 <!--/ Total Revenue -->
                 <div class="col-lg-8  order-md-2">
                     <div class="row">
-                        <div class="col-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title d-flex align-items-start justify-content-between">
-                                        <div>
-                                            <h6>Total Order</h6>
-                                        </div>
-                                    </div>
-                                    <h3 id="totalOrder" class="card-title mb-2">{{orderCount}}</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title d-flex align-items-start justify-content-between">
-                                        <div>
-                                            <h6>Total Order</h6>
-                                        </div>
-                                    </div>
-                                    <h3 id="totalOrder" class="card-title mb-2">{{orderCount}}</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title d-flex align-items-start justify-content-between">
-                                        <div>
-                                            <h6>Total Order</h6>
-                                        </div>
-                                    </div>
-                                    <h3 id="totalOrder" class="card-title mb-2">{{orderCount}}</h3>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        <div class="col-lg-8">
-                            <div class="card shadow">
-                                <!-- Card Header - Dropdown -->
+                        <div class="col-lg-8 col-md-12 col-6 mb-4">
+                            <div class="card shadow mb-4">
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">
-                                        This Week Earnings</h6>
-                                    <div class="dropdown no-arrow">
-
-                                    </div>
+                                    <h6 class="m-0 font-weight-bold text-primary">Most sold products</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body mb-3">
                                     <div class="chart-area">
-                                        <canvas id="mychart"></canvas>
+                                        <canvas width="200" height="80" id="brand"></canvas>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="container-fluid pt-4 px-4">
-                            <div class="row g-4">
-                                <div class="col-sm-12 col-xl-6">
-                                    <div class="bg-light text-center rounded p-4">
-                                        <div class="d-flex align-items-center justify-content-between mb-4">
-                                            <h6 class="mb-0">Worldwide Sales</h6>
-                                            <a href="">Show All</a>
-                                        </div>
-                                        <canvas id="mychart"></canvas>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-xl-6">
-                                    <div class="bg-light text-center rounded p-4">
-                                        <div class="d-flex align-items-center justify-content-between mb-4">
-                                            <h6 class="mb-0">Sales & Revenue</h6>
-                                            <a href="">Show All</a>
-                                        </div>
-                                        <canvas id="brand"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-8">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Most sold products</h6>
-                                    <div class="dropdown no-arrow">
-
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="brand"></canvas>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <!-- Order Statistics -->
-                <!--/ Expense Overview -->
-
-                <!-- Transactions -->
-
-                <!--/ Transactions -->
-            </div>
         </div>
-        <!-- / Content -->
-
-        <!-- Footer -->
     </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <script>
     async function forHome() {
 
-        var totalAmount = []
-        var totalDate = []
+        const totalAmount = []
+        const totalDate = []
 
         $.ajax({
             url: '/admin/getData',
@@ -219,56 +130,63 @@
                 document.getElementById('totalOrder').innerHTML = response.orderCount
                 document.getElementById('totalAmountPaid').innerHTML = 'Rs ' + response.totalArray
 
-                console.log(totalAmount);
-
-                console.log(response, 'response');
+                console.log(response.brandArray)
 
                 var ctx = document.getElementById('mychart').getContext('2d');
-                var chart = new Chart(ctx, {
-                    // The type of chart we want to create
+                const mychart = new Chart(ctx, {
                     type: 'line',
-
-                    // The data for our dataset
                     data: {
                         labels: response.dateArray,
                         datasets: [{
-                            label: "last week dataset",
-                            backgroundColor: 'rgb(128, 204, 255)',
-                            borderColor: 'rgb(128, 204, 255)',
-                            borderWidth: 1,
+                            label: 'Earnings of this Week',
                             data: response.totalArray,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
                         }]
                     },
-
-                    // Configuration options go here
                     options: {
-                        tooltips: {
-                            mode: 'index'
-                        },
-
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
                     }
                 });
 
-                var ctxs = document.getElementById('brand').getContext('2d');
-                var chart = new Chart(ctxs, {
-                    // The type of chart we want to create
-                    type: 'doughnut',
 
-                    // The data for our dataset
+                {{!-- brand --}}
+                var ctx = document.getElementById('brand').getContext('2d');
+                const brand = new Chart(ctx, {
+                    type: 'doughnut',
                     data: {
                         labels: response.brandArray,
                         datasets: [{
-                            label: "brand wise dataset",
+                            label: 'Sold Products Data',
                             backgroundColor: ['rgb(168,114,154)', 'rgb(95,183,255)', 'rgb(255,63,108)', 'rgb(255,159,32)', 'rgb(102,191,97)', 'rgb(167,215,197)'],
                             borderColor: ['rgb(168,114,154)', 'rgb(95,183,255)', 'rgb(255,63,108)', 'rgb(255,159,32)', 'rgb(102,191,97)', 'rgb(167,215,197)'],
                             data: response.sumArray,
                         }]
                     },
-
-                    // Configuration options go here
                     options: {
-                        tooltips: {
+                        scales: {
+                           tooltips: {
                             mode: 'index'
+                        }
                         }
                     }
                 });
@@ -280,19 +198,43 @@
 
 </script>
 
-{{!--
-<script src="/admin/vendor/jquery/jquery.min.js"></script>
-<script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: 'Earnings of this Week',
+                data: [12, 19, 3, 5, 8, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 
-<!-- Core plugin JavaScript-->
-<script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="/admin/js/sb-admin-2.min.js"></script>
-
-<!-- Page level plugins -->
-<script src="/admin/vendor/chart.js/Chart.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="/admin/js/demo/chart-area-demo.js"></script>
-<script src="/admin/js/demo/chart-pie-demo.js"></script> --}}
+{{!-- Links --}}

@@ -347,7 +347,7 @@ router.post('/place-order', async (req, res) => {
   const netTotal = await totalAmount.grandTotal.total
   const deliveryCharges = await userHelpers.deliveryCharge(netTotal);
   const grandTotal = await userHelpers.grandTotal(netTotal, deliveryCharges);
-console.log(netTotal);
+console.log("gksd"+cartItems);
   userHelpers
     .placeOrder(
       req.body,
