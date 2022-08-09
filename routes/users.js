@@ -605,15 +605,6 @@ router.get('/filterPage',async(req,res)=>{
   });
 })
 
-// router.get('/filterBrands/:id',(req,res)=>{
-//   const brandFilter = req.params.id
-//   productHelpers.filterBrands(brandFilter).then((result)=>{
-//     filterResult = result
-
-//     res.redirect('/filterPage')
-//   })
-// })
-
 router.post('/search-filter',async(req,res)=>{
   const a = req.body
   const price = parseInt(a.MRP)
